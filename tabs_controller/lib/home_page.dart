@@ -20,9 +20,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     _tabcontroller = TabController(length: topTabs.length, vsync: this)
       ..addListener(() {
-        setState(() {
-          super.initState();
-        });
+        setState(() {});
+        super.initState();
       });
   }
 
