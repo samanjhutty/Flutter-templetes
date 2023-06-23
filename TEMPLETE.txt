@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+void main(List<String> args) {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+        debugShowCheckedModeBanner: false, home: MainPage(title: 'Test App'));
+  }
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key, required this.title});
+
+  final String title;
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
+  TabController? _tabController;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final List<Tab> _topTabs = [
+    const Tab(icon: Icon(Icons.home)),
+    const Tab(icon: Icon(Icons.message))
+  ];
+  @override
+  void initState() {
+    _tabController = TabController(length: _topTabs.length, vsync: this);
+    super.initState();
+  }
+
+  Future<bool> onWillPop() async {
+    if (_tabController?.index == 0) {
+      await SystemNavigator.pop();
+    }
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _tabController?.index = 0;
+    });
+
+    return _tabController?.index == 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        onWillPop: onWillPop,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.black54,
+            title: Text(widget.title),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    });
+                  },
+                  icon: const Icon(Icons.menu))
+            ],
+            bottom: TabBar(
+              tabs: _topTabs,
+              controller: _tabController,
+              indicatorColor: Colors.black38,
+              labelColor: const Color.fromARGB(255, 101, 198, 247),
+            ),
+          ),
+          endDrawer: const Drawer(),
+          body: TabBarView(
+            controller: _tabController,
+            children: const [],
+          ),
+        ));
+  }
+}

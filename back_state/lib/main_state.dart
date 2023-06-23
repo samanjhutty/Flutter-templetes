@@ -32,8 +32,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     _tabController = TabController(length: topTabs.length, vsync: this)
       ..addListener(() {
         setState(() {});
-        super.initState();
       });
+    super.initState();
   }
 
   @override
@@ -47,7 +47,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   margin: const EdgeInsets.only(right: 10),
                   child: IconButton(
                       onPressed: () {
-                        const snackBar = SnackBar(content: 'Menu Pressed');
+                        const snackBar =
+                            SnackBar(content: Text('Menu Pressed'));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                       icon: const Icon(Icons.menu),
