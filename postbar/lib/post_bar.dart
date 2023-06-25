@@ -18,24 +18,30 @@ class _PostbarState extends State<Postbar> {
               'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg')),
       Expanded(
           child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
+              margin: const EdgeInsets.fromLTRB(16, 0, 32, 0),
               decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 224, 224, 224),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               child: TextButton(
-                style: TextButton.styleFrom(
+                style: const ButtonStyle(
+                    padding: MaterialStatePropertyAll(
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 16)),
+                    overlayColor: MaterialStatePropertyAll(Colors.transparent),
                     alignment: Alignment.centerLeft,
-                    foregroundColor: Colors.black87),
+                    foregroundColor: MaterialStatePropertyAll(Colors.black87)),
                 onPressed: () {},
                 child: const Text(
                   'Whats on your mind?..',
                 ),
               ))),
-      IconButton(
-          onPressed: () {},
-          hoverColor: Colors.transparent,
-          icon: const Icon(Icons.photo_library)),
+      Container(
+        margin: const EdgeInsets.only(right: 8),
+        child: IconButton(
+            onPressed: () {},
+            hoverColor: Colors.transparent,
+            icon: const Icon(Icons.photo_library)),
+      ),
     ]);
   }
 }
