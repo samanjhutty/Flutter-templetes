@@ -54,13 +54,7 @@ class _DrawerState extends State<MyDrawer> {
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   subtitle: const Text('view your profile'),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) =>
-                                gotoPage(context, const MyProfilePage()))));
-                  },
+                  onTap: () => gotoPage(const MyProfilePage()),
                 ),
                 const Divider(thickness: 1),
                 const ListTile(

@@ -1,3 +1,4 @@
+import 'package:drawer_layout/assets.dart';
 import 'package:drawer_layout/drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorkey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.green),
       home: const MyMainPage(
