@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-List<PostsModel> postModelFromJson(String str) =>
-    List<PostsModel>.from(json.decode(str).map((x) => PostsModel.fromJson(x)));
+List<TodosModel> todoModelFromJson(String str) =>
+    List<TodosModel>.from(json.decode(str).map((x) => TodosModel.fromJson(x)));
 
-String postModelToJson(List<PostsModel> data) =>
+String todoModelToJson(List<TodosModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class PostsModel {
+class TodosModel {
   int? _userId;
   int? _id;
   String? _title;
-  String? _body;
+  bool? _completed;
 
-  PostsModel({int? userId, int? id, String? title, String? body}) {
+  TodosModel({int? userId, int? id, String? title, bool? completed}) {
     if (userId != null) {
       _userId = userId;
     }
@@ -22,8 +22,8 @@ class PostsModel {
     if (title != null) {
       _title = title;
     }
-    if (body != null) {
-      _body = body;
+    if (completed != null) {
+      _completed = completed;
     }
   }
 
@@ -33,14 +33,14 @@ class PostsModel {
   set id(int? id) => _id = id;
   String? get title => _title;
   set title(String? title) => _title = title;
-  String? get body => _body;
-  set body(String? body) => _body = body;
+  bool? get completed => _completed;
+  set completed(bool? completed) => _completed = completed;
 
-  PostsModel.fromJson(Map<String, dynamic> json) {
+  TodosModel.fromJson(Map<String, dynamic> json) {
     _userId = json['userId'];
     _id = json['id'];
     _title = json['title'];
-    _body = json['body'];
+    _completed = json['completed'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,7 +48,7 @@ class PostsModel {
     data['userId'] = _userId;
     data['id'] = _id;
     data['title'] = _title;
-    data['body'] = _body;
+    data['completed'] = _completed;
     return data;
   }
 }
