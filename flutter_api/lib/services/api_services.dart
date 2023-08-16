@@ -1,14 +1,15 @@
-import 'dart:math';
 import 'package:api/models/albums_model.dart';
 import 'package:api/models/comments_model.dart';
 import 'package:api/models/photos_model.dart';
 import 'package:api/models/posts_model.dart';
 import 'package:api/models/todos_model.dart';
 import 'package:api/services/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:api/models/users_models.dart';
 
 class ApiServices {
+  String data = 'Exception:: ';
   Future<List<UsersModel>?> getUsers() async {
     try {
       var url = Uri.parse(ApiConstants.baseURL + ApiConstants.userEndpoint);
@@ -20,7 +21,7 @@ class ApiServices {
         return _userModel;
       }
     } catch (e) {
-      log(e.toString() as num);
+      debugPrint(data + e.toString());
     }
     return null;
   }
@@ -36,7 +37,7 @@ class ApiServices {
         return _todoModel;
       }
     } catch (e) {
-      log(e.toString() as num);
+      debugPrint(data + e.toString());
     }
     return null;
   }
@@ -52,7 +53,7 @@ class ApiServices {
         return _postModel;
       }
     } catch (e) {
-      log(e.toString() as num);
+      debugPrint(data + e.toString());
     }
     return null;
   }
@@ -68,7 +69,7 @@ class ApiServices {
         return _photoModel;
       }
     } catch (e) {
-      log(e.toString() as num);
+      debugPrint(data + e.toString());
     }
     return null;
   }
@@ -84,7 +85,7 @@ class ApiServices {
         return _commentModel;
       }
     } catch (e) {
-      log(e.toString() as num);
+      debugPrint(data + e.toString());
     }
     return null;
   }
@@ -100,7 +101,7 @@ class ApiServices {
         return _albumModel;
       }
     } catch (e) {
-      log(e.toString() as num);
+      debugPrint(data + e.toString());
     }
     return null;
   }

@@ -1,7 +1,9 @@
 import 'dart:ui';
-
+import 'package:api/main.dart';
 import 'package:api/models/users_models.dart';
+import 'package:api/pages/user_details.dart';
 import 'package:api/services/api_services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Users extends StatefulWidget {
@@ -11,7 +13,7 @@ class Users extends StatefulWidget {
 }
 
 class _UsersState extends State<Users> {
-  late List<UsersModel>? _userData = [];
+  List<UsersModel>? _userData = [];
 
   @override
   void initState() {
@@ -21,13 +23,13 @@ class _UsersState extends State<Users> {
 
   void _getUserData() async {
     _userData = await ApiServices().getUsers();
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+    Future.delayed(const Duration(seconds: 1));
   }
 
   @override
   Widget build(BuildContext context) => Container(
       child: _userData!.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? noData(data: () => _getUserData())
           : Column(
               children: [
                 const Padding(
@@ -59,43 +61,59 @@ class _UsersState extends State<Users> {
                       padding: const EdgeInsets.all(8),
                       itemCount: _userData!.length,
                       itemBuilder: (context, i) => Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 16),
-                                      child: CircleAvatar(
-                                          radius: 16,
+                            child: InkWell(
+                              onTap: () => showCupertinoModalPopup(
+                                  barrierColor: Colors.transparent,
+                                  context: context,
+                                  builder: (BuildContext context) => Material(
+                                      type: MaterialType.card,
+                                      child:
+                                          UserDetails(id: i, data: _userData))),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 16),
+                                        child: CircleAvatar(
+                                            radius: 16,
+                                            child: Text(
+                                                _userData![i].id.toString())),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8),
                                           child: Text(
-                                              _userData![i].id.toString())),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        _userData![i].name.toString(),
-                                        style: const TextStyle(
-                                            fontFeatures: [FontFeature.swash()],
-                                            fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.left,
+                                            _userData![i].name.toString(),
+                                            style: const TextStyle(
+                                                fontFeatures: [
+                                                  FontFeature.swash()
+                                                ],
+                                                fontWeight: FontWeight.w600),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        _userData![i].email.toString(),
-                                        textAlign: TextAlign.left,
+                                      Expanded(
+                                        child: Text(
+                                          _userData![i].email.toString(),
+                                          textAlign: TextAlign.left,
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                          _userData![i]
-                                              .company!
-                                              .name
-                                              .toString(),
-                                          textAlign: TextAlign.left),
-                                    )
-                                  ]),
+                                      Expanded(
+                                        child: Text(
+                                            _userData![i]
+                                                .company!
+                                                .name
+                                                .toString(),
+                                            textAlign: TextAlign.right),
+                                      )
+                                    ]),
+                              ),
                             ),
                           )),
                 ),

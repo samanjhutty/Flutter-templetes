@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(primarySwatch: Colors.purple),
-        debugShowCheckedModeBanner: false,
         title: 'Menu Bars',
         home: const MainPage(title: 'Menu Bars'));
   }

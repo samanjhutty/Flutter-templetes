@@ -12,9 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MainTab(title: 'Flutter API'),
-      title: 'Flutter API');
+      home: MainTab(title: 'Flutter API'), title: 'Flutter API');
 }
 
 class MainTab extends StatefulWidget {
@@ -60,3 +58,12 @@ class _MainTabState extends State<MainTab> with TickerProviderStateMixin {
         ),
       );
 }
+
+Widget? noData({required VoidCallback data}) =>
+    Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const CircularProgressIndicator(),
+      Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: TextButton(onPressed: data, child: const Text('Refresh')),
+      )
+    ]);

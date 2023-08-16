@@ -2,20 +2,13 @@ import 'package:end_drawer/home_page.dart';
 import 'package:end_drawer/messages.dart';
 import 'package:flutter/material.dart';
 
-void main(List<String> args) {
-  runApp(const MyApp());
-}
+void main(List<String> args) => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MainPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  Widget build(BuildContext context) => const MaterialApp(home: MainPage());
 }
 
 class MainPage extends StatefulWidget {
