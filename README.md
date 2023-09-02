@@ -18,3 +18,13 @@ Chronological order of files
 ///Project folders
 14. back_state
 15. end_drawer
+16. drawer_layout
+17. postbar
+18. storybar
+19. menubar
+20. posts
+21. friend_page
+22. profile page
+
+///Firebase
+23. firebase_otp_login
