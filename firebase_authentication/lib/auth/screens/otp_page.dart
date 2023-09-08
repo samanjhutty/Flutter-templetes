@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
-import '../firebase/controller.dart';
+import '../../firebase/signup_controller.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key}) : super(key: key);
 
   final String title = 'OTP Page';
   @override
-  _OTPPageState createState() => _OTPPageState();
+  State<OTPPage> createState() => _OTPPageState();
 }
 
 class _OTPPageState extends State<OTPPage> {
-  FirebaseAuthentication authentication = Get.put(FirebaseAuthentication());
+  final SignUpAuth _signUpAuth = Get.put(SignUpAuth());
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: SingleChildScrollView(
+  Widget build(BuildContext context) => Stack(children: [
+        Center(
+            child: SingleChildScrollView(
           child: Column(children: [
             const Padding(
                 padding: EdgeInsets.only(bottom: 16),
@@ -33,7 +34,7 @@ class _OTPPageState extends State<OTPPage> {
             Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Text(
-                    'Enter the OTP sent to you mobile number ${authentication.shadowedMobile}')),
+                    'Enter the OTP sent to you mobile number ${_signUpAuth.shadowedPhone}')),
             OTPTextField(
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 fieldStyle: FieldStyle.box,
@@ -41,8 +42,11 @@ class _OTPPageState extends State<OTPPage> {
                 fieldWidth: 45,
                 width: 350,
                 length: 6,
-                onChanged: (value) => authentication.otp = value,
-                onCompleted: (value) => authentication.verifyMobile()),
+                onChanged: (value) {},
+                onCompleted: (value) {
+                  _signUpAuth.phoneOTP = value;
+                  _signUpAuth.verifyMobile();
+                }),
             Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child:
@@ -51,6 +55,14 @@ class _OTPPageState extends State<OTPPage> {
                   TextButton(onPressed: () {}, child: const Text('Resend'))
                 ]))
           ]),
-        ),
-      );
+        )),
+        Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                )))
+      ]);
 }

@@ -1,4 +1,5 @@
-import 'package:firebase_authentication/auth/login_page.dart';
+import 'package:firebase_authentication/auth/screens/mobile_login.dart';
+import 'package:firebase_authentication/auth/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const Material(child: LoginPage()))),
+                    builder: (context) =>
+                        const Material(child: MobileLogin()))),
             icon: const CircleAvatar(child: Icon(Icons.person))),
         const SizedBox(width: 16)
       ]),
