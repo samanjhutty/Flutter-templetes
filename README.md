@@ -22,5 +22,6 @@ Chronological order of files
 19. menubar
 20. posts
 21. friend_page
-22. profile page
+22. profile_page
 23. firebase_authentication      ///Firebase projects starts
+24. firebase_storage
