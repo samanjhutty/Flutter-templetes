@@ -68,15 +68,17 @@ class _MobileLoginState extends State<MobileLogin> {
                           style: ElevatedButton.styleFrom(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 16)),
-                          onPressed: () => setState(() {
-                                if (_signUpAuth.phone.text.length == 10) {
-                                  btn = const SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: CircularProgressIndicator());
-                                }
-                                _signUpAuth.mobileSignIn();
-                              }),
+                          onPressed: () {
+                            _signUpAuth.mobileSignIn();
+                            setState(() {
+                              if (_signUpAuth.phone.text.length == 10) {
+                                btn = const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator());
+                              }
+                            });
+                          },
                           child: btn)),
                   Padding(
                       padding: const EdgeInsets.only(top: 16),

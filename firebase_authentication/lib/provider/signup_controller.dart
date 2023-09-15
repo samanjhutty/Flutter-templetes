@@ -32,7 +32,6 @@ class SignUpAuth extends GetxController {
   void mobileSignIn() async {
     await _auth.verifyPhoneNumber(
         phoneNumber: countryCode + phone.text,
-        timeout: const Duration(minutes: 10),
         verificationCompleted: (PhoneAuthCredential authCredential) {
           phone.clear();
           username.clear();
