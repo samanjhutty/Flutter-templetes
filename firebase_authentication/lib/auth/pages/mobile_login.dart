@@ -14,6 +14,17 @@ class MobileLogin extends StatefulWidget {
 class _MobileLoginState extends State<MobileLogin> {
   final SignUpAuth _signUpAuth = Get.put(SignUpAuth());
   final double myWidth = 350;
+  Widget? btn;
+
+  @override
+  void initState() {
+    btn = const Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [Icon(Icons.arrow_forward_rounded), Text('Get OTP')],
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => SafeArea(
         child: Stack(children: [
@@ -53,13 +64,20 @@ class _MobileLoginState extends State<MobileLogin> {
                   Container(
                       padding: const EdgeInsets.only(top: 16),
                       width: myWidth,
-                      child: ElevatedButton.icon(
+                      child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 16)),
-                          onPressed: () => _signUpAuth.mobileSignIn(),
-                          icon: const Icon(Icons.arrow_forward_rounded),
-                          label: const Text('Get OTP'))),
+                          onPressed: () => setState(() {
+                                if (_signUpAuth.phone.text.length == 10) {
+                                  btn = const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: CircularProgressIndicator());
+                                }
+                                _signUpAuth.mobileSignIn();
+                              }),
+                          child: btn)),
                   Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: Row(
