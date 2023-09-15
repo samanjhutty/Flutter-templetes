@@ -14,9 +14,7 @@ Chronological order of files
 11. stateful_widget
 12. form
 13. Controller
-
-///Project folders
-14. back_state
+14. back_state          ///Project folders starts
 15. end_drawer
 16. drawer_layout
 17. postbar
@@ -24,7 +22,6 @@ Chronological order of files
 19. menubar
 20. posts
 21. friend_page
-22. profile page
-
-///Firebase
-23. firebase_otp_login
+22. profile_page
+23. firebase_authentication      ///Firebase projects starts
+24. firebase_storage
