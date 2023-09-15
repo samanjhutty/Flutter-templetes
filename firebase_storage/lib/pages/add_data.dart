@@ -1,6 +1,4 @@
-import 'dart:math';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/provider/controller.dart';
 import 'package:flutter/material.dart';

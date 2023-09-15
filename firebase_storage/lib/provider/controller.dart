@@ -4,8 +4,6 @@ import 'package:firebase_storage/model/db_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../pages/show_data.dart';
-
 class DBController extends GetxController {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
