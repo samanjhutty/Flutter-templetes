@@ -52,7 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
             : PopupMenuButton(
                 padding: EdgeInsets.zero,
                 child: Row(children: [
-                  const CircleAvatar(child: Icon(Icons.person)),
+                  CircleAvatar(
+                    child: _user!.photoURL == null
+                        ? const Icon(Icons.person)
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(_user!.photoURL.toString(),
+                                height: double.infinity,
+                                width: double.infinity,
+                                fit: BoxFit.cover),
+                          ),
+                  ),
                   const SizedBox(width: 8),
                   Text(_user!.displayName == null
                       ? ''
@@ -74,9 +84,21 @@ class _MyHomePageState extends State<MyHomePage> {
                               }),
                           child: const ListTile(
                               leading: Icon(Icons.logout_rounded),
-                              title: Text('Logout')))
+                              title: Text('Logout'))),
+                      PopupMenuItem(
+                          onTap: () => setState(() {
+                                FirebaseAuth.instance.currentUser!.delete();
+                                Future.delayed(const Duration(seconds: 1)).then(
+                                    (value) =>
+                                        Get.offAll(() => const MyHomePage()));
+                                Get.rawSnackbar(
+                                    message: 'Sucessfully Deleted Account');
+                              }),
+                          child: const ListTile(
+                              leading: Icon(Icons.delete_forever_rounded),
+                              title: Text('Delete Account')))
                     ]),
         const SizedBox(width: 16)
       ]),
-      body: Center(child: Text(widget.title)));
+      body: const Center(child: Text('Tap on the profile icon to begin')));
 }

@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
 import 'package:firebase_authentication/main.dart';
+import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignUpAuth extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ProfileController profile = Get.put(ProfileController());
+
   TextEditingController phone = TextEditingController();
   TextEditingController username = TextEditingController();
   TextEditingController emailAddress = TextEditingController();
@@ -14,20 +17,24 @@ class SignUpAuth extends GetxController {
   TextEditingController confirmPassword = TextEditingController();
 
   String shadowedPhone = 'XXXXXXXXXX';
-  String countryCode = '+91';
+  final String countryCode = '+91';
   String phoneOTP = '';
   String verifyID = '';
 
   void createAccount() {
     _signUpWithEmail(emailAddress.text.trim(), password.text.trim(),
         confirmPassword.text.trim());
-    _auth.currentUser!.updateDisplayName(username.text.trim());
     emailAddress.clear();
     password.clear();
     username.clear();
+    confirmPassword.clear();
   }
 
-  void logout() async => await _auth.signOut();
+  void logout() async {
+    await _auth.signOut();
+    Get.offAll(() => const MyHomePage());
+    Get.rawSnackbar(message: 'Logged out Sucessfully');
+  }
 
   void mobileSignIn() async {
     await _auth.verifyPhoneNumber(
@@ -60,7 +67,7 @@ class SignUpAuth extends GetxController {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
           verificationId: verifyID, smsCode: phoneOTP);
       await _auth.signInWithCredential(authCredential);
-      Future.delayed(const Duration(seconds: 2)).then((value) {
+      Future.delayed(const Duration(seconds: 1)).then((value) {
         if (_auth.currentUser!.displayName == null) {
           Get.to(() => const Material(child: UpdateProfile()));
         } else {
@@ -86,9 +93,11 @@ class SignUpAuth extends GetxController {
               await _auth.createUserWithEmailAndPassword(
                   email: emailAddress, password: cPassword),
               Get.rawSnackbar(message: 'Account created sucessfully'),
-              _auth.currentUser!.updateDisplayName(username.text),
-              Future.delayed(const Duration(seconds: 2))
-                  .then((value) => Get.offAll(() => const MyHomePage())),
+              await _auth.currentUser!.updateDisplayName(username.text.trim()),
+              await profile.uploadImage(),
+              Future.delayed(const Duration(seconds: 1)).then((value) {
+                Get.offAll(() => const MyHomePage());
+              }),
             }
           : Get.rawSnackbar(message: "Password doesn't match");
     } on FirebaseAuthException catch (e) {
