@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_storage/main.dart';
 import 'package:hive_storage/model/boxes.dart';
-
 import '../model/data_model.dart';
 
 class AddData extends StatefulWidget {
@@ -69,8 +69,13 @@ class _AddDataState extends State<AddData> {
                                 name: nameController.text.trim(),
                                 score:
                                     double.parse(scoreController.text.trim())));
-                            print('item count: ${dbBox.length}');
-                            Navigator.pop(context);
+
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Material(child: MyHomePage())),
+                                (route) => route.isCurrent);
                           },
                           child: const Text('Save'))),
                   const SizedBox(width: 12),

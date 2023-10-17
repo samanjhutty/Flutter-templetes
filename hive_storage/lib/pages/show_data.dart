@@ -18,31 +18,72 @@ class _MainScreenState extends State<MainScreen> {
             'Click the + icon to add data.',
             style: TextStyle(color: Colors.grey),
           ))
-        : ListView.builder(
-            itemCount: dbBox.length,
-            itemBuilder: (context, index) => Slidable(
-                endActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                        onPressed: (value) {
-                          dbBox.deleteAt(index);
-                        },
-                        icon: Icons.delete,
-                        label: 'Delete')
-                  ],
-                ),
-                child: Card(
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                const Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(dbBox.get(index)!.name),
-                        Text(dbBox.get(index)!.score.toString())
-                      ],
-                    ),
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Text('S. no',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                          Expanded(
+                              flex: 4,
+                              child: Text('Name',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                          Expanded(
+                              flex: 2,
+                              child: Text('Score',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                        ]),
                   ),
-                )));
+                ),
+                Card(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: dbBox.length,
+                      itemBuilder: (context, index) => Slidable(
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                  onPressed: (context) => setState(() {
+                                        dbBox.deleteAt(index);
+                                      }),
+                                  icon: Icons.delete,
+                                  label: 'Delete')
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: Text('${index + 1}.',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600)),
+                                ),
+                                Expanded(
+                                    flex: 4,
+                                    child: Text(dbBox.get(index)!.name)),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                        dbBox.get(index)!.score.toString()))
+                              ],
+                            ),
+                          ))),
+                ),
+              ],
+            ),
+          );
   }
 }

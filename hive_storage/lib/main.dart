@@ -10,6 +10,7 @@ void main() async {
   Hive.registerAdapter(DataModelAdapter());
   box = await Hive.openBox<DataModel>('DB');
   runApp(const MyApp());
+  print(dbBox.length);
 }
 
 class MyApp extends StatelessWidget {
@@ -22,14 +23,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
           useMaterial3: true),
-      home: const MyHomePage(title: 'Hive Storage'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
+  final String title = 'Hive Storage';
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -45,6 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title,
             style:
                 TextStyle(fontWeight: FontWeight.bold, color: scheme.primary)),
+        actions: [
+          TextButton.icon(
+              onPressed: () {
+                dbBox.clear();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const Material(child: MyHomePage())),
+                    (route) => route.isCurrent);
+              },
+              icon: const Icon(Icons.delete_forever_rounded),
+              label: const Text('Delete All'))
+        ],
       ),
       body: const MainScreen(),
       floatingActionButton: FloatingActionButton(
