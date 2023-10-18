@@ -71,8 +71,8 @@ class ProfileController with ChangeNotifier {
 
   Future uploadImage() async {
     storage.Reference reference = _storage
-        .refFromURL('gs://auth-demo-0.appspot.com/')
-        .child('user-profile-images/profile-${_user!.uid}');
+        .ref()
+        .child('user-profile-images/profile-uid:${_user!.uid}');
     debugPrint('uploading to ${reference.bucket}');
 
     try {

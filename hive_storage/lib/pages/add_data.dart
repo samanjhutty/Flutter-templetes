@@ -4,7 +4,11 @@ import 'package:hive_storage/model/boxes.dart';
 import '../model/data_model.dart';
 
 class AddData extends StatefulWidget {
-  const AddData({super.key});
+  AddData({super.key, this.name, this.score, this.index});
+
+  String? name = '';
+  String? score = '';
+  int? index;
 
   @override
   State<AddData> createState() => _AddDataState();
@@ -14,6 +18,15 @@ class _AddDataState extends State<AddData> {
   TextEditingController nameController = TextEditingController();
   TextEditingController scoreController = TextEditingController();
   double myWidth = 350;
+
+  @override
+  void initState() {
+    if (widget.index != null) {
+      nameController.text = widget.name!;
+      scoreController.text = widget.score!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +78,17 @@ class _AddDataState extends State<AddData> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 20)),
                           onPressed: () {
-                            dbBox.add(DataModel(
-                                name: nameController.text.trim(),
-                                score:
-                                    double.parse(scoreController.text.trim())));
+                            widget.index != null
+                                ? dbBox.putAt(
+                                    widget.index!,
+                                    DataModel(
+                                        name: nameController.text.trim(),
+                                        score: double.parse(
+                                            scoreController.text.trim())))
+                                : dbBox.add(DataModel(
+                                    name: nameController.text.trim(),
+                                    score: double.parse(
+                                        scoreController.text.trim())));
 
                             Navigator.pushAndRemoveUntil(
                                 context,

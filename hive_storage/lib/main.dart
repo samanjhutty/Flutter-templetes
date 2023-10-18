@@ -10,7 +10,6 @@ void main() async {
   Hive.registerAdapter(DataModelAdapter());
   box = await Hive.openBox<DataModel>('DB');
   runApp(const MyApp());
-  print(dbBox.length);
 }
 
 class MyApp extends StatelessWidget {
@@ -48,8 +47,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 TextStyle(fontWeight: FontWeight.bold, color: scheme.primary)),
         actions: [
           TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: scheme.error),
               onPressed: () {
-                dbBox.clear();
+                dbBox.isEmpty
+                    ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('List is already Empty!.')))
+                    : {
+                        dbBox.clear(),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('All data has been cleared.'))),
+                        Future.delayed(const Duration(seconds: 1)).then(
+                            (value) => Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Material(child: MyHomePage())),
+                                (route) => route.isCurrent))
+                      };
+              },
+              icon: const Icon(Icons.delete_forever_rounded),
+              label: const Text('Delete All')),
+          IconButton(
+              color: scheme.primary,
+              tooltip: 'Refresh',
+              onPressed: () {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -57,12 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             const Material(child: MyHomePage())),
                     (route) => route.isCurrent);
               },
-              icon: const Icon(Icons.delete_forever_rounded),
-              label: const Text('Delete All'))
+              icon: const Icon(Icons.refresh_rounded)),
+          const SizedBox(width: 16)
         ],
       ),
       body: const MainScreen(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        tooltip: 'Add Data',
         backgroundColor: scheme.primary,
         foregroundColor: scheme.onPrimary,
         shape: const CircleBorder(),
@@ -70,8 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const Material(child: AddData()),
+              builder: (BuildContext context) => Material(child: AddData()),
             )),
       ),
     );
