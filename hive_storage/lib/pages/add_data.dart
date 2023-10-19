@@ -83,6 +83,7 @@ class _AddDataState extends State<AddData> {
                       if (value!.isEmpty) {
                         return 'Provide a value!';
                       }
+                      return null;
                     },
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     keyboardType: const TextInputType.numberWithOptions(),

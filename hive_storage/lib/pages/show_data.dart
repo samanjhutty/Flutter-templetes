@@ -32,20 +32,21 @@ class _MainScreenState extends State<MainScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Expanded(
+                            flex: 2,
                             child: Text('S. no',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
                           Expanded(
-                              flex: 4,
+                              flex: 5,
                               child: Text('Name',
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold))),
                           Expanded(
-                              flex: 2,
+                              flex: 3,
                               child: Text('Score',
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold))),
-                          SizedBox(width: 14)
+                          Expanded(child: SizedBox())
                         ]),
                   ),
                 ),
@@ -55,17 +56,17 @@ class _MainScreenState extends State<MainScreen> {
                       itemCount: dbBox.length,
                       itemBuilder: (context, index) => Slidable(
                           endActionPane: ActionPane(
+                            extentRatio: 0.3,
                             motion: const ScrollMotion(),
                             children: [
                               SlidableAction(
                                   backgroundColor: scheme.secondary,
                                   foregroundColor: scheme.onSecondary,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12)),
+                                  borderRadius: const BorderRadius.horizontal(
+                                      right: Radius.circular(12)),
                                   onPressed: (context) => setState(() {
                                         dbBox.deleteAt(index);
                                       }),
-                                  icon: Icons.delete,
                                   label: 'Delete')
                             ],
                           ),
@@ -86,20 +87,23 @@ class _MainScreenState extends State<MainScreen> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Expanded(
+                                      flex: 2,
                                       child: Text('${index + 1}.',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w600)),
                                     ),
                                     Expanded(
-                                        flex: 4,
+                                        flex: 5,
                                         child:
                                             Text('${dbBox.get(index)?.name}')),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 3,
                                         child:
                                             Text('${dbBox.get(index)?.score}')),
-                                    const Icon(Icons.arrow_back_ios_rounded,
-                                        size: 14)
+                                    const Expanded(
+                                      child: Icon(Icons.arrow_back_ios_rounded,
+                                          size: 14),
+                                    )
                                   ]),
                             ),
                           ))),
