@@ -50,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextButton.styleFrom(foregroundColor: scheme.error),
               onPressed: () {
                 dbBox.isEmpty
-                    ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('List is already Empty!.')))
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('List is already Empty!')))
                     : {
                         dbBox.clear(),
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -94,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => Material(child: AddData()),
+              builder: (BuildContext context) =>
+                  const Material(child: AddData()),
             )),
       ),
     );

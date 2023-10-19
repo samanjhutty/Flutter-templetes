@@ -4,11 +4,11 @@ import 'package:hive_storage/model/boxes.dart';
 import '../model/data_model.dart';
 
 class AddData extends StatefulWidget {
-  AddData({super.key, this.name, this.score, this.index});
+  const AddData({super.key, this.name, this.score, this.index});
 
-  String? name = '';
-  String? score = '';
-  int? index;
+  final String? name;
+  final int? score;
+  final int? index;
 
   @override
   State<AddData> createState() => _AddDataState();
@@ -21,15 +21,16 @@ class _AddDataState extends State<AddData> {
 
   @override
   void initState() {
-    if (widget.index != null) {
+    if (widget.index != null && widget.name != null && widget.score != null) {
       nameController.text = widget.name!;
-      scoreController.text = widget.score!;
+      scoreController.text = widget.score!.toString();
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     ColorScheme scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -53,23 +54,38 @@ class _AddDataState extends State<AddData> {
                     textAlign: TextAlign.center),
                 const SizedBox(height: 16),
               ]),
-              Column(children: [
-                TextFormField(
-                  controller: nameController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                      label: Text('Enter Name'), border: OutlineInputBorder()),
-                ),
-                const SizedBox(height: 30),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: scoreController,
-                  decoration: const InputDecoration(
-                      label: Text('Enter Score'), border: OutlineInputBorder()),
-                ),
-                const SizedBox(height: 30),
-              ]),
+              Form(
+                key: formKey,
+                child: Column(children: [
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Provide a value!';
+                      }
+                    },
+                    controller: nameController,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                        label: Text('Enter Name'),
+                        border: OutlineInputBorder()),
+                  ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Provide a value!';
+                      }
+                    },
+                    keyboardType: TextInputType.phone,
+                    controller: scoreController,
+                    decoration: const InputDecoration(
+                        label: Text('Enter Score'),
+                        border: OutlineInputBorder()),
+                  ),
+                  const SizedBox(height: 30),
+                ]),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -78,24 +94,28 @@ class _AddDataState extends State<AddData> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 20)),
                           onPressed: () {
-                            widget.index != null
-                                ? dbBox.putAt(
-                                    widget.index!,
-                                    DataModel(
-                                        name: nameController.text.trim(),
-                                        score: double.parse(
-                                            scoreController.text.trim())))
-                                : dbBox.add(DataModel(
-                                    name: nameController.text.trim(),
-                                    score: double.parse(
-                                        scoreController.text.trim())));
+                            if (formKey.currentState!.validate()) {
+                              widget.index != null
+                                  ? dbBox.putAt(
+                                      widget.index!,
+                                      DataModel(
+                                          name: nameController.text.trim(),
+                                          score: int.parse(
+                                              scoreController.text.trim())))
+                                  : dbBox.add(DataModel(
+                                      name: nameController.text.trim(),
+                                      score: int.parse(
+                                          scoreController.text.trim())));
+                              print(nameController.text.trim());
+                              print(scoreController.text.trim());
 
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const Material(child: MyHomePage())),
-                                (route) => route.isCurrent);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Material(child: MyHomePage())),
+                                  (route) => route.isCurrent);
+                            }
                           },
                           child: const Text('Save'))),
                   const SizedBox(width: 12),

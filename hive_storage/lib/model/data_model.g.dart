@@ -18,7 +18,7 @@ class DataModelAdapter extends TypeAdapter<DataModel> {
     };
     return DataModel(
       name: fields[0] as String,
-      score: fields[1] as double,
+      score: fields[1] as int,
     );
   }
 

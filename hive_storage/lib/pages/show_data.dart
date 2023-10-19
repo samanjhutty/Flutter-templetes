@@ -78,10 +78,7 @@ class _MainScreenState extends State<MainScreen> {
                                       builder: (context) => Material(
                                               child: AddData(
                                             name: dbBox.get(index)?.name,
-                                            score: dbBox
-                                                .get(index)
-                                                ?.score
-                                                .toString(),
+                                            score: dbBox.get(index)?.score,
                                             index: index,
                                           )))),
                               child: Row(

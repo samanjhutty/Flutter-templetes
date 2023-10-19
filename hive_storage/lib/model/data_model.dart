@@ -9,7 +9,7 @@ class DataModel {
   String name;
 
   @HiveField(1)
-  double score;
+  int score;
 }
 
 List<DataModel> dataModel = [];
