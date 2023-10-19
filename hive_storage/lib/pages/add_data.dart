@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_storage/main.dart';
 import 'package:hive_storage/model/boxes.dart';
 import '../model/data_model.dart';
@@ -58,11 +59,16 @@ class _AddDataState extends State<AddData> {
                 key: formKey,
                 child: Column(children: [
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Provide a value!';
                       }
+                      return null;
                     },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp(r'(\d+)'))
+                    ],
                     controller: nameController,
                     keyboardType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
@@ -72,12 +78,14 @@ class _AddDataState extends State<AddData> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Provide a value!';
                       }
                     },
-                    keyboardType: TextInputType.phone,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    keyboardType: const TextInputType.numberWithOptions(),
                     controller: scoreController,
                     decoration: const InputDecoration(
                         label: Text('Enter Score'),
@@ -106,8 +114,6 @@ class _AddDataState extends State<AddData> {
                                       name: nameController.text.trim(),
                                       score: int.parse(
                                           scoreController.text.trim())));
-                              print(nameController.text.trim());
-                              print(scoreController.text.trim());
 
                               Navigator.pushAndRemoveUntil(
                                   context,

@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('All data has been cleared.'))),
-                        Future.delayed(const Duration(seconds: 1)).then(
+                        Future.delayed(const Duration(milliseconds: 10)).then(
                             (value) => Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
