@@ -25,7 +25,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   @override
   void initState() {
     _signUpAuth.username.text =
-        _user!.displayName != null ? _user!.displayName.toString().trim() : '';
+        _user!.displayName != null ? _user!.displayName!.trim() : '';
     btn = const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Icon(Icons.arrow_forward_rounded),
       SizedBox(width: 8),
@@ -135,10 +135,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       child: CircularProgressIndicator());
                                 });
                                 await profile.uploadImage();
-                                await _user!.updateDisplayName(
-                                    _signUpAuth.username.text.trim());
-                                Get.rawSnackbar(message: 'Success');
-                                Get.offAll(() => const MyHomePage());
+                                await _user!
+                                    .updateDisplayName(
+                                        _signUpAuth.username.text.trim())
+                                    .whenComplete(() {
+                                  Get.rawSnackbar(message: 'Success');
+                                  Get.offAll(() => const MyHomePage());
+                                });
                               },
                               child: btn)),
                     ],

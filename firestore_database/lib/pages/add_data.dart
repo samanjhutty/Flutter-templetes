@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import '../provider/controller.dart';
 
 class AddData extends StatefulWidget {
-  AddData({super.key, this.snapshot});
-  DocumentSnapshot? snapshot;
+  const AddData({super.key, this.snapshot});
+  final DocumentSnapshot? snapshot;
   @override
   State<AddData> createState() => _AddDataState();
 }
@@ -64,6 +64,7 @@ class _AddDataState extends State<AddData> {
                           if (value!.isEmpty) {
                             return 'Name is required';
                           }
+                          return null;
                         },
                         controller: _dbController.name,
                         decoration: const InputDecoration(
@@ -79,6 +80,7 @@ class _AddDataState extends State<AddData> {
                           if (value!.isEmpty) {
                             return 'Email is required';
                           }
+                          return null;
                         },
                         controller: _dbController.email,
                         decoration: const InputDecoration(
@@ -97,6 +99,7 @@ class _AddDataState extends State<AddData> {
                           } else if (value.length != 10) {
                             return 'Invalid Number';
                           }
+                          return null;
                         },
                         maxLength: 10,
                         controller: _dbController.phone,

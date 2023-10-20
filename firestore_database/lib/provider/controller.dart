@@ -17,11 +17,12 @@ class DBController extends GetxController {
         name: name.text, email: email.text, mobile: int.parse(phone.text));
     await db.collection(collectionPath).add(data.fromJson()).whenComplete(() {
       Get.rawSnackbar(message: 'Data saved sucessfully');
-      Future.delayed(const Duration(seconds: 1))
-          .then((value) => Get.offAll(() => const MyHomePage()));
-      name.clear();
-      email.clear();
-      phone.clear();
+      Get.offAll(() => const MyHomePage());
+      Future.delayed(const Duration(milliseconds: 100)).then((value) {
+        name.clear();
+        email.clear();
+        phone.clear();
+      });
     });
   }
 
@@ -34,11 +35,12 @@ class DBController extends GetxController {
         .update(data.fromJson())
         .whenComplete(() {
       Get.rawSnackbar(message: 'Data updated sucessfully');
-      Future.delayed(const Duration(seconds: 1))
-          .then((value) => Get.offAll(() => const MyHomePage()));
-      name.clear();
-      email.clear();
-      phone.clear();
+      Get.offAll(() => const MyHomePage());
+      Future.delayed(const Duration(milliseconds: 100)).then((value) {
+        name.clear();
+        email.clear();
+        phone.clear();
+      });
     });
   }
 }

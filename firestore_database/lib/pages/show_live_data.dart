@@ -34,8 +34,9 @@ class _ShowLiveDataState extends State<ShowLiveData> {
                 stream: _users.snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> steamSnapshot) {
-                  return steamSnapshot.hasData
-                      ? ListView.builder(
+                  return !steamSnapshot.hasData
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView.builder(
                           itemCount: steamSnapshot.data!.docs.length,
                           itemBuilder: (BuildContext context, i) {
                             final DocumentSnapshot documentSnapshot =
@@ -78,8 +79,7 @@ class _ShowLiveDataState extends State<ShowLiveData> {
                                       icon: const Icon(
                                           Icons.delete_outline_rounded)),
                                 ));
-                          })
-                      : const Center(child: CircularProgressIndicator());
+                          });
                 }),
       );
 }

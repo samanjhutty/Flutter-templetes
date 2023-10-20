@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(title: Text(widget.title), actions: [
           TextButton.icon(
               label: const Text('Add Data'),
-              onPressed: () => Get.to(() => Material(
+              onPressed: () => Get.to(() => const Material(
                     child: AddData(),
                   )),
               icon: const Icon(Icons.add_rounded)),

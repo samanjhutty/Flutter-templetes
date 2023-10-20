@@ -23,17 +23,20 @@ class SignUpAuth extends GetxController {
 
   void createAccount() {
     _signUpWithEmail(emailAddress.text.trim(), password.text.trim(),
-        confirmPassword.text.trim());
-    emailAddress.clear();
-    password.clear();
-    username.clear();
-    confirmPassword.clear();
+            confirmPassword.text.trim())
+        .whenComplete(() {
+      emailAddress.clear();
+      password.clear();
+      username.clear();
+      confirmPassword.clear();
+    });
   }
 
   void logout() async {
-    await _auth.signOut();
-    Get.offAll(() => const MyHomePage());
-    Get.rawSnackbar(message: 'Logged out Sucessfully');
+    await _auth.signOut().whenComplete(() {
+      Get.rawSnackbar(message: 'Logged out Sucessfully');
+      Get.offAll(() => const MyHomePage());
+    });
   }
 
   void mobileSignIn() async {
@@ -66,16 +69,13 @@ class SignUpAuth extends GetxController {
     try {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
           verificationId: verifyID, smsCode: phoneOTP);
-      await _auth.signInWithCredential(authCredential);
-      Future.delayed(const Duration(seconds: 1)).then((value) {
-        if (_auth.currentUser!.displayName == null) {
-          Get.to(() => const Material(child: UpdateProfile()));
-        } else {
-          Get.offAll(() => const MyHomePage());
-        }
-      });
+      await _auth.signInWithCredential(authCredential).whenComplete(() {
+        Get.rawSnackbar(message: 'OTP verified');
 
-      Get.rawSnackbar(message: 'OTP verified');
+        _auth.currentUser!.displayName == null
+            ? Get.to(() => const Material(child: UpdateProfile()))
+            : Get.offAll(() => const MyHomePage());
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
         Get.rawSnackbar(message: 'Invalid code');
@@ -89,16 +89,15 @@ class SignUpAuth extends GetxController {
       String emailAddress, String password, String cPassword) async {
     try {
       cPassword == password
-          ? {
-              await _auth.createUserWithEmailAndPassword(
-                  email: emailAddress, password: cPassword),
-              Get.rawSnackbar(message: 'Account created sucessfully'),
-              await _auth.currentUser!.updateDisplayName(username.text.trim()),
-              await profile.uploadImage(),
-              Future.delayed(const Duration(seconds: 1)).then((value) {
-                Get.offAll(() => const MyHomePage());
-              }),
-            }
+          ? await _auth
+              .createUserWithEmailAndPassword(
+                  email: emailAddress, password: cPassword)
+              .whenComplete(() async {
+              Get.rawSnackbar(message: 'Account created sucessfully');
+              await _auth.currentUser!.updateDisplayName(username.text.trim());
+              await profile.uploadImage();
+              Get.offAll(() => const MyHomePage());
+            })
           : Get.rawSnackbar(message: "Password doesn't match");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

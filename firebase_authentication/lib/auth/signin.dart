@@ -47,7 +47,8 @@ class _SignInState extends State<SignIn> {
                   width: myWidth,
                   child: TextFormField(
                     controller: _auth.password,
-                    keyboardType: TextInputType.emailAddress,
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
                     decoration: const InputDecoration(
                         labelText: 'Enter Password',
                         border: OutlineInputBorder()),

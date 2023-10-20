@@ -10,23 +10,26 @@ class SignInAuth extends GetxController {
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  void emailLogin() {
-    _signInWithEmail(emailAddress.text.trim(), password.text.trim());
-    emailAddress.clear();
-    password.clear();
-  }
+  void emailLogin() =>
+      _signInWithEmail(emailAddress.text.trim(), password.text.trim())
+          .whenComplete(() {
+        emailAddress.clear();
+        password.clear();
+      });
 
-  void logout() async {
-    await _auth.signOut();
-    Get.offAll(() => const MyHomePage());
-    Get.rawSnackbar(message: 'Logged out Sucessfully');
-  }
+  void logout() async => await _auth.signOut().whenComplete(() {
+        Get.rawSnackbar(message: 'Logged out Sucessfully');
+        Get.offAll(() => const MyHomePage());
+      });
 
   Future<void> _signInWithEmail(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.offAll(() => const MyHomePage());
-      Get.rawSnackbar(message: 'Logged in Sucessfully');
+      await _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .whenComplete(() {
+        Get.rawSnackbar(message: 'Logged in Sucessfully');
+        Get.offAll(() => const MyHomePage());
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.rawSnackbar(message: 'No user found for that email.');
@@ -58,9 +61,10 @@ class SignInAuth extends GetxController {
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
-      await _auth.signInWithCredential(credential);
-      Get.offAll(() => const MyHomePage());
-      Get.rawSnackbar(message: 'Logged in via Google');
+      await _auth.signInWithCredential(credential).whenComplete(() {
+        Get.rawSnackbar(message: 'Logged in via Google');
+        Get.offAll(() => const MyHomePage());
+      });
     }
   }
 }
