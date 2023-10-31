@@ -8,14 +8,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileController with ChangeNotifier {
-  File? _image;
+  File? image;
   Uint8List? webImage;
   String imageURL = '';
 
   final storage.FirebaseStorage _storage = storage.FirebaseStorage.instance;
   final User? _user = FirebaseAuth.instance.currentUser;
-
-  File? get image => _image;
 
   void pickImageLayout(BuildContext context) {
     showDialog(
@@ -41,9 +39,9 @@ class ProfileController with ChangeNotifier {
     try {
       final file = await FilePicker.platform
           .pickFiles(type: FileType.image, allowMultiple: false);
-      var image = file!.files.first;
-      webImage = image.bytes;
-      _image = File(image.path!);
+      var pickedImage = file!.files.first;
+      webImage = pickedImage.bytes;
+      image = File(pickedImage.path!);
       notifyListeners();
     } catch (e) {
       debugPrint('Error: $e');
@@ -54,7 +52,7 @@ class ProfileController with ChangeNotifier {
     try {
       final file = await ImagePicker().pickImage(source: source);
       if (file != null) {
-        _image = File(file.path);
+        image = File(file.path);
         Get.back();
         notifyListeners();
       } else {
@@ -72,17 +70,19 @@ class ProfileController with ChangeNotifier {
   Future uploadImage() async {
     storage.Reference reference = _storage
         .ref()
-        .child('user-profile-images/profile-uid:${_user!.uid}');
+        .child('user-profile-images/profile-uid:${_user!.uid}.jpg');
     debugPrint('uploading to ${reference.bucket}');
 
     try {
-      if (image == null) return;
-      debugPrint('uploading....');
-      await reference.putFile(File(image!.path));
-      debugPrint('uploading finished');
-      imageURL = await reference.getDownloadURL();
-      debugPrint('storage image url: $imageURL');
-      await _user!.updatePhotoURL(imageURL);
+      if (image != null) {
+        debugPrint('uploading....');
+        await reference.putFile(File(image!.path)).then((p0) async {
+          debugPrint('Uploading Sucess');
+          imageURL = await reference.getDownloadURL();
+          debugPrint('storage image url: $imageURL');
+          await _user!.updatePhotoURL(imageURL);
+        });
+      }
     } on FirebaseException catch (e) {
       debugPrint('Firebase Error: $e');
     }

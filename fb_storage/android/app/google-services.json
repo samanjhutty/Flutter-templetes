@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "740789149324",
+    "project_id": "fb-storage-aece9",
+    "storage_bucket": "fb-storage-aece9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740789149324:android:410a556c320eebbf6da5a9",
+        "android_client_info": {
+          "package_name": "com.example.fb_storage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChpTR7COMbT6kKdfE9PAPqPQKQd8mRbX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
