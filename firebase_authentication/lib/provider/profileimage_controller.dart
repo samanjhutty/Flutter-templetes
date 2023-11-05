@@ -3,88 +3,56 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileController with ChangeNotifier {
-  File? image;
+  FilePickerResult? pickedfile;
   Uint8List? webImage;
-  String imageURL = '';
-
-  final storage.FirebaseStorage _storage = storage.FirebaseStorage.instance;
+  File? image;
   final User? _user = FirebaseAuth.instance.currentUser;
 
-  void pickImageLayout(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              contentPadding: const EdgeInsets.symmetric(vertical: 4),
-              content: Column(mainAxisSize: MainAxisSize.min, children: [
-                ListTile(
-                  leading: const Icon(Icons.camera),
-                  title: const Text('Camera'),
-                  onTap: () => _pickImage(source: ImageSource.camera),
-                ),
-                ListTile(
-                    leading: const Icon(Icons.photo),
-                    title: const Text('Gallery'),
-                    onTap: () => _pickImage(source: ImageSource.gallery))
-              ]));
-        });
-  }
-
-  void pickImageWeb() async {
-    try {
-      final file = await FilePicker.platform
-          .pickFiles(type: FileType.image, allowMultiple: false);
-      var pickedImage = file!.files.first;
-      webImage = pickedImage.bytes;
-      image = File(pickedImage.path!);
+  pickImage() async {
+    pickedfile = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (pickedfile != null) {
+      kIsWeb
+          ? webImage = pickedfile!.files.single.bytes
+          : image = File(pickedfile!.files.single.path!);
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error: $e');
+    } else {
+      mySnackbar('No Image selected');
     }
   }
 
-  void _pickImage({required ImageSource source}) async {
-    try {
-      final file = await ImagePicker().pickImage(source: source);
-      if (file != null) {
-        image = File(file.path);
-        Get.back();
-        notifyListeners();
-      } else {
-        Get.back();
-        notifyListeners();
-        Get.rawSnackbar(message: 'No file selected.');
+  uploadImage() async {
+    if (image == null && webImage == null) {
+      mySnackbar('Select an Image first!');
+    } else {
+      try {
+        storage.FirebaseStorage fbStorage = storage.FirebaseStorage.instance;
+        storage.Reference ref =
+            fbStorage.ref().child('image-profilephoto_${_user!.uid}.jpg');
+
+        if (pickedfile != null) {
+          mySnackbar('uploading...');
+          kIsWeb
+              ? ref.putData(pickedfile!.files.single.bytes!)
+              : ref.putFile(File(pickedfile!.files.single.path!));
+          mySnackbar('Sucess');
+        } else {
+          mySnackbar('No Image Selected!');
+        }
+      } on FirebaseException catch (e) {
+        mySnackbar('Firebase error occured!');
+        debugPrint('FB Error $e');
+      } catch (e) {
+        mySnackbar('something unexpected occured!');
+        debugPrint('Error $e');
       }
-    } catch (e) {
-      debugPrint('Error: $e');
-      Get.rawSnackbar(message: 'Something went wrong, try again.');
-      Get.back();
     }
   }
 
-  Future uploadImage() async {
-    storage.Reference reference = _storage
-        .ref()
-        .child('user-profile-images/profile-uid:${_user!.uid}.jpg');
-    debugPrint('uploading to ${reference.bucket}');
-
-    try {
-      if (image != null) {
-        debugPrint('uploading....');
-        await reference.putFile(File(image!.path)).then((p0) async {
-          debugPrint('Uploading Sucess');
-          imageURL = await reference.getDownloadURL();
-          debugPrint('storage image url: $imageURL');
-          await _user!.updatePhotoURL(imageURL);
-        });
-      }
-    } on FirebaseException catch (e) {
-      debugPrint('Firebase Error: $e');
-    }
+  mySnackbar(String text) async {
+    await Get.closeCurrentSnackbar();
+    Get.rawSnackbar(message: text);
   }
 }

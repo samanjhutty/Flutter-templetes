@@ -14,6 +14,8 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final SignUpAuth _controller = Get.put(SignUpAuth());
+  final ProfileController _profileController = Get.put(ProfileController());
+
   final double myWidth = 350;
   final double boxHeight = 20;
 
@@ -58,13 +60,7 @@ class _SignUpState extends State<SignUp> {
                             icon: const CircleAvatar(
                                 backgroundColor: Colors.white,
                                 child: Icon(Icons.camera_alt, size: 20)),
-                            onPressed: () => setState(() {
-                              if (kIsWeb) {
-                                provider.pickImageWeb();
-                              } else {
-                                provider.pickImageLayout(context);
-                              }
-                            }),
+                            onPressed: () => _profileController.pickImage(),
                           )
                         ]),
                         const Padding(
