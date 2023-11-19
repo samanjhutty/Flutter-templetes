@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_authentication/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignInAuth extends GetxController {
+class SignInAuth extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -19,7 +18,8 @@ class SignInAuth extends GetxController {
 
   void logout() async => await _auth.signOut().whenComplete(() {
         Get.rawSnackbar(message: 'Logged out Sucessfully');
-        Get.offAll(() => const MyHomePage());
+        notifyListeners();
+        Get.back();
       });
 
   Future<void> _signInWithEmail(String email, String password) async {
@@ -28,7 +28,8 @@ class SignInAuth extends GetxController {
           .signInWithEmailAndPassword(email: email, password: password)
           .whenComplete(() {
         Get.rawSnackbar(message: 'Logged in Sucessfully');
-        Get.offAll(() => const MyHomePage());
+        notifyListeners();
+        Get.back();
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -51,7 +52,8 @@ class SignInAuth extends GetxController {
     if (kIsWeb) {
       GoogleAuthProvider authProvider = GoogleAuthProvider();
       await _auth.signInWithPopup(authProvider);
-      Get.offAll(() => const MyHomePage());
+      notifyListeners();
+      Get.back();
       Get.rawSnackbar(message: 'Logged in via Google');
     } else {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -63,7 +65,8 @@ class SignInAuth extends GetxController {
 
       await _auth.signInWithCredential(credential).whenComplete(() {
         Get.rawSnackbar(message: 'Logged in via Google');
-        Get.offAll(() => const MyHomePage());
+        notifyListeners();
+        Get.back();
       });
     }
   }

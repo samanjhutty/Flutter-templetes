@@ -1,8 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:provider/provider.dart';
+
 import '../../provider/signup_controller.dart';
 
 class OTPPage extends StatefulWidget {
@@ -14,8 +15,6 @@ class OTPPage extends StatefulWidget {
 }
 
 class _OTPPageState extends State<OTPPage> {
-  final SignUpAuth _signUpAuth = Get.put(SignUpAuth());
-
   @override
   Widget build(BuildContext context) => SafeArea(
         child: Stack(children: [
@@ -37,7 +36,7 @@ class _OTPPageState extends State<OTPPage> {
               Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Text(
-                      'Enter the OTP sent to you mobile number ${_signUpAuth.shadowedPhone}')),
+                      'Enter the OTP sent to you mobile number ${context.watch<SignUpAuth>().shadowedPhone}')),
               OTPTextField(
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   fieldStyle: FieldStyle.box,
@@ -47,8 +46,8 @@ class _OTPPageState extends State<OTPPage> {
                   length: 6,
                   onChanged: (value) {},
                   onCompleted: (value) {
-                    _signUpAuth.phoneOTP = value;
-                    _signUpAuth.verifyMobile();
+                    context.watch<SignUpAuth>().phoneOTP = value;
+                    context.read<SignUpAuth>().verifyMobile();
                   }),
               Padding(
                   padding: const EdgeInsets.only(top: 8),

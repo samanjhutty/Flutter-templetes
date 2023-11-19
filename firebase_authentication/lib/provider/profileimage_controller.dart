@@ -3,9 +3,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileController with ChangeNotifier {
+  TextEditingController username = TextEditingController();
   FilePickerResult? pickedfile;
   Uint8List? webImage;
   File? image;
@@ -23,30 +25,33 @@ class ProfileController with ChangeNotifier {
     }
   }
 
-  uploadImage() async {
+  updateProfile() async {
     if (image == null && webImage == null) {
       mySnackbar('Select an Image first!');
     } else {
       try {
         storage.FirebaseStorage fbStorage = storage.FirebaseStorage.instance;
+        storage.Reference refRoot =
+            fbStorage.ref().child('user-profile-images');
         storage.Reference ref =
-            fbStorage.ref().child('image-profilephoto_${_user!.uid}.jpg');
+            refRoot.child('image-profilephoto_${_user!.uid}.jpg');
 
         if (pickedfile != null) {
           mySnackbar('uploading...');
           kIsWeb
               ? ref.putData(pickedfile!.files.single.bytes!)
               : ref.putFile(File(pickedfile!.files.single.path!));
-          mySnackbar('Sucess');
+          String imageURL = await ref.getDownloadURL();
+          await _user!.updatePhotoURL(imageURL);
+          await _user!.updateDisplayName(username.text.trim());
+          mySnackbar('Profile Updated');
         } else {
           mySnackbar('No Image Selected!');
         }
-      } on FirebaseException catch (e) {
+      } on FirebaseException {
         mySnackbar('Firebase error occured!');
-        debugPrint('FB Error $e');
       } catch (e) {
         mySnackbar('something unexpected occured!');
-        debugPrint('Error $e');
       }
     }
   }

@@ -3,6 +3,7 @@ import 'package:firebase_authentication/auth/signup.dart';
 import 'package:firebase_authentication/provider/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class MobileLogin extends StatefulWidget {
   const MobileLogin({Key? key}) : super(key: key);
@@ -12,7 +13,6 @@ class MobileLogin extends StatefulWidget {
 }
 
 class _MobileLoginState extends State<MobileLogin> {
-  final SignUpAuth _signUpAuth = Get.put(SignUpAuth());
   final double myWidth = 350;
   Widget? btn;
 
@@ -54,10 +54,11 @@ class _MobileLoginState extends State<MobileLogin> {
                       padding: const EdgeInsets.only(bottom: 16),
                       width: myWidth,
                       child: TextFormField(
-                          controller: _signUpAuth.phone,
+                          controller: context.watch<SignUpAuth>().phone,
                           decoration: InputDecoration(
                               labelText: 'Enter Mobile Number',
-                              prefixText: _signUpAuth.countryCode,
+                              prefixText:
+                                  context.watch<SignUpAuth>().countryCode,
                               border: const OutlineInputBorder()),
                           maxLength: 10,
                           keyboardType: TextInputType.phone)),
@@ -69,9 +70,14 @@ class _MobileLoginState extends State<MobileLogin> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 16)),
                           onPressed: () {
-                            _signUpAuth.mobileSignIn();
+                            context.read<SignUpAuth>().mobileSignIn();
                             setState(() {
-                              if (_signUpAuth.phone.text.length == 10) {
+                              if (context
+                                      .watch<SignUpAuth>()
+                                      .phone
+                                      .text
+                                      .length ==
+                                  10) {
                                 btn = const SizedBox(
                                     height: 24,
                                     width: 24,

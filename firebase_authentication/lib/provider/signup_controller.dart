@@ -6,7 +6,7 @@ import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpAuth extends GetxController {
+class SignUpAuth extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ProfileController profile = Get.put(ProfileController());
 
@@ -35,7 +35,7 @@ class SignUpAuth extends GetxController {
   void logout() async {
     await _auth.signOut().whenComplete(() {
       Get.rawSnackbar(message: 'Logged out Sucessfully');
-      Get.offAll(() => const MyHomePage());
+      notifyListeners();
     });
   }
 
@@ -74,7 +74,8 @@ class SignUpAuth extends GetxController {
 
         _auth.currentUser!.displayName == null
             ? Get.to(() => const Material(child: UpdateProfile()))
-            : Get.offAll(() => const MyHomePage());
+            : Get.until((route) => route.isCurrent);
+        notifyListeners();
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
@@ -94,9 +95,9 @@ class SignUpAuth extends GetxController {
                   email: emailAddress, password: cPassword)
               .whenComplete(() async {
               Get.rawSnackbar(message: 'Account created sucessfully');
-              await _auth.currentUser!.updateDisplayName(username.text.trim());
-              await profile.uploadImage();
-              Get.offAll(() => const MyHomePage());
+              await profile.updateProfile();
+              notifyListeners();
+              Get.until((route) => route.isCurrent);
             })
           : Get.rawSnackbar(message: "Password doesn't match");
     } on FirebaseAuthException catch (e) {

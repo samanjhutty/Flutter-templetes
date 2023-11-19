@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import '../provider/signin_controller.dart';
 import 'package:firebase_authentication/auth/pages/mobile_login.dart';
 import 'package:firebase_authentication/auth/signup.dart';
@@ -12,7 +12,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final SignInAuth _auth = Get.put(SignInAuth());
   final double myWidth = 350;
 
   @override
@@ -35,7 +34,7 @@ class _SignInState extends State<SignIn> {
                   padding: const EdgeInsets.only(top: 16),
                   width: 350,
                   child: TextFormField(
-                    controller: _auth.emailAddress,
+                    controller: context.watch<SignInAuth>().emailAddress,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                         labelText: 'Enter Email Address',
@@ -46,7 +45,7 @@ class _SignInState extends State<SignIn> {
                   padding: const EdgeInsets.only(bottom: 16),
                   width: myWidth,
                   child: TextFormField(
-                    controller: _auth.password,
+                    controller: context.watch<SignInAuth>().password,
                     obscureText: true,
                     keyboardType: TextInputType.visiblePassword,
                     decoration: const InputDecoration(
@@ -59,7 +58,7 @@ class _SignInState extends State<SignIn> {
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16)),
-                      onPressed: () => _auth.emailLogin(),
+                      onPressed: () => context.read<SignInAuth>().emailLogin(),
                       icon: const Icon(Icons.arrow_forward_rounded),
                       label: const Text('Login'))),
               const Padding(
@@ -98,7 +97,8 @@ class _SignInState extends State<SignIn> {
                         CircleAvatar(
                             child: IconButton(
                                 tooltip: 'Google',
-                                onPressed: () => _auth.googleLogin(),
+                                onPressed: () =>
+                                    context.read<SignInAuth>().googleLogin(),
                                 icon: Image.asset(
                                     'lib/assets/images/google.png')))
                       ])),
