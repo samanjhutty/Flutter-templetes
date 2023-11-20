@@ -4,8 +4,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignInAuth extends ChangeNotifier {
+class SignInAuth with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final User? _user = FirebaseAuth.instance.currentUser;
+  User? get user => _user;
+
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -16,11 +19,16 @@ class SignInAuth extends ChangeNotifier {
         password.clear();
       });
 
-  void logout() async => await _auth.signOut().whenComplete(() {
-        Get.rawSnackbar(message: 'Logged out Sucessfully');
-        notifyListeners();
-        Get.back();
-      });
+  void logout() async {
+    await _auth.signOut();
+    notifyListeners();
+    Get.rawSnackbar(message: 'Logged out Sucessfully');
+  }
+
+  void deleteUser() async {
+    await _user!.delete();
+    notifyListeners();
+  }
 
   Future<void> _signInWithEmail(String email, String password) async {
     try {
@@ -29,7 +37,7 @@ class SignInAuth extends ChangeNotifier {
           .whenComplete(() {
         Get.rawSnackbar(message: 'Logged in Sucessfully');
         notifyListeners();
-        Get.back();
+        Get.until((route) => route.isCurrent);
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -45,29 +53,31 @@ class SignInAuth extends ChangeNotifier {
   }
 
   Future<void> googleLogin() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId:
-            '226438241533-45d1a9rkmihcvgjf3d9ol9c04h54669u.apps.googleusercontent.com');
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+          clientId:
+              '226438241533-45d1a9rkmihcvgjf3d9ol9c04h54669u.apps.googleusercontent.com');
 
-    if (kIsWeb) {
-      GoogleAuthProvider authProvider = GoogleAuthProvider();
-      await _auth.signInWithPopup(authProvider);
-      notifyListeners();
+      if (kIsWeb) {
+        GoogleAuthProvider authProvider = GoogleAuthProvider();
+        await _auth.signInWithPopup(authProvider);
+        notifyListeners();
+      } else {
+        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+
+        await _auth.signInWithCredential(credential);
+        notifyListeners();
+      }
       Get.back();
       Get.rawSnackbar(message: 'Logged in via Google');
-    } else {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-
-      await _auth.signInWithCredential(credential).whenComplete(() {
-        Get.rawSnackbar(message: 'Logged in via Google');
-        notifyListeners();
-        Get.back();
-      });
+    } on FirebaseAuthException {
+      Get.back();
+      Get.rawSnackbar(message: 'Something went Wrong, try again!');
     }
   }
 }

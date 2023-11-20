@@ -26,9 +26,7 @@ class ProfileController with ChangeNotifier {
   }
 
   updateProfile() async {
-    if (image == null && webImage == null) {
-      mySnackbar('Select an Image first!');
-    } else {
+    if (image != null || webImage != null) {
       try {
         storage.FirebaseStorage fbStorage = storage.FirebaseStorage.instance;
         storage.Reference refRoot =
@@ -39,8 +37,8 @@ class ProfileController with ChangeNotifier {
         if (pickedfile != null) {
           mySnackbar('uploading...');
           kIsWeb
-              ? ref.putData(pickedfile!.files.single.bytes!)
-              : ref.putFile(File(pickedfile!.files.single.path!));
+              ? await ref.putData(pickedfile!.files.single.bytes!)
+              : await ref.putFile(File(pickedfile!.files.single.path!));
           String imageURL = await ref.getDownloadURL();
           await _user!.updatePhotoURL(imageURL);
           await _user!.updateDisplayName(username.text.trim());
@@ -57,7 +55,7 @@ class ProfileController with ChangeNotifier {
   }
 
   mySnackbar(String text) async {
-    await Get.closeCurrentSnackbar();
+    Get.closeAllSnackbars();
     Get.rawSnackbar(message: text);
   }
 }

@@ -1,6 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_authentication/auth/pages/mobile_login.dart';
+import 'package:firebase_authentication/auth/pages/otp_page.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/signin.dart';
+import 'package:firebase_authentication/auth/signup.dart';
 import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:firebase_authentication/provider/signin_controller.dart';
 import 'package:firebase_authentication/provider/signup_controller.dart';
@@ -28,11 +30,19 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => SignInAuth())
         ],
         child: GetMaterialApp(
+            initialRoute: '/',
+            routes: {
+              '/': (p0) => const MyHomePage(),
+              '/mobile': (p0) => const MobileLogin(),
+              '/otppage': (p0) => const OTPPage(),
+              '/profile': (p0) => const UpdateProfile(),
+              '/signin': (p0) => const SignIn(),
+              '/signup': (p0) => const SignUp()
+            },
             title: 'Firebase Demo',
             theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true),
-            home: const MyHomePage()));
+                useMaterial3: true)));
   }
 }
 
@@ -45,72 +55,57 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  User? _user;
-
   @override
-  void initState() {
-    _user = FirebaseAuth.instance.currentUser;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(title: Text(widget.title), actions: [
-        _user == null
-            ? TextButton.icon(
-                onPressed: () => Get.to(() => const Material(child: SignIn())),
-                label: const Text('Sign In'),
-                icon: const Icon(Icons.login_rounded))
-            : PopupMenuButton(
-                padding: EdgeInsets.zero,
-                child: Row(children: [
-                  CircleAvatar(
-                    child: _user!.photoURL == null
-                        ? const Icon(Icons.person)
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(_user!.photoURL.toString(),
-                                height: double.infinity,
-                                width: double.infinity,
-                                fit: BoxFit.cover),
-                          ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(_user!.displayName == null
-                      ? ''
-                      : _user!.displayName.toString())
-                ]),
-                itemBuilder: (BuildContext context) => [
-                      PopupMenuItem(
-                          onTap: () => Get.offAll(
-                              () => const Material(child: UpdateProfile())),
-                          child: const ListTile(
-                              leading: Icon(Icons.edit),
-                              title: Text('Update Profile'))),
-                      PopupMenuItem(
-                          onTap: () => setState(() {
-                                FirebaseAuth.instance.signOut();
-                                Get.offAll(() => const MyHomePage());
-                                Get.rawSnackbar(
-                                    message: 'Sucessfully Logged out');
-                              }),
-                          child: const ListTile(
-                              leading: Icon(Icons.logout_rounded),
-                              title: Text('Logout'))),
-                      PopupMenuItem(
-                          onTap: () => setState(() {
-                                FirebaseAuth.instance.currentUser!.delete();
-                                Future.delayed(const Duration(seconds: 1)).then(
-                                    (value) =>
-                                        Get.offAll(() => const MyHomePage()));
-                                Get.rawSnackbar(
-                                    message: 'Sucessfully Deleted Account');
-                              }),
-                          child: const ListTile(
-                              leading: Icon(Icons.delete_forever_rounded),
-                              title: Text('Delete Account')))
+  Widget build(BuildContext context) {
+    print('build');
+    return Scaffold(
+        appBar: AppBar(title: Text(widget.title), actions: [
+          Consumer<SignInAuth>(builder: (context, value, child) {
+            return value.user == null
+                ? TextButton.icon(
+                    onPressed: () => Get.toNamed('/signin'),
+                    label: const Text('Sign In'),
+                    icon: const Icon(Icons.login_rounded))
+                : PopupMenuButton(
+                    padding: EdgeInsets.zero,
+                    child: Row(children: [
+                      CircleAvatar(
+                        child: value.user!.photoURL == null
+                            ? const Icon(Icons.person)
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(
+                                    value.user!.photoURL.toString(),
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover),
+                              ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(value.user!.displayName == null
+                          ? ''
+                          : value.user!.displayName.toString()),
                     ]),
-        const SizedBox(width: 16)
-      ]),
-      body: const Center(child: Text('Tap on the profile icon to begin')));
+                    itemBuilder: (BuildContext context) => [
+                          PopupMenuItem(
+                              onTap: () => Get.offAllNamed('/profile'),
+                              child: const ListTile(
+                                  leading: Icon(Icons.edit),
+                                  title: Text('Update Profile'))),
+                          PopupMenuItem(
+                              onTap: () => value.logout(),
+                              child: const ListTile(
+                                  leading: Icon(Icons.logout_rounded),
+                                  title: Text('Logout'))),
+                          PopupMenuItem(
+                              onTap: () => value.deleteUser(),
+                              child: const ListTile(
+                                  leading: Icon(Icons.delete_forever_rounded),
+                                  title: Text('Delete Account')))
+                        ]);
+          }),
+          const SizedBox(width: 16)
+        ]),
+        body: const Center(child: Text('Tap on the profile icon to begin')));
+  }
 }

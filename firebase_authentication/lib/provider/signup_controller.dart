@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
-import 'package:firebase_authentication/main.dart';
 import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,10 +32,9 @@ class SignUpAuth extends ChangeNotifier {
   }
 
   void logout() async {
-    await _auth.signOut().whenComplete(() {
-      Get.rawSnackbar(message: 'Logged out Sucessfully');
-      notifyListeners();
-    });
+    await _auth.signOut();
+    notifyListeners();
+    Get.rawSnackbar(message: 'Logged out Sucessfully');
   }
 
   void mobileSignIn() async {
@@ -70,12 +68,12 @@ class SignUpAuth extends ChangeNotifier {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
           verificationId: verifyID, smsCode: phoneOTP);
       await _auth.signInWithCredential(authCredential).whenComplete(() {
+        notifyListeners();
         Get.rawSnackbar(message: 'OTP verified');
 
         _auth.currentUser!.displayName == null
-            ? Get.to(() => const Material(child: UpdateProfile()))
-            : Get.until((route) => route.isCurrent);
-        notifyListeners();
+            ? Get.toNamed('/profie')
+            : Get.until((route) => route.isFirst);
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
