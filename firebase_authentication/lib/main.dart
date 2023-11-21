@@ -66,11 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    print('build');
     return Scaffold(
         appBar: AppBar(title: Text(widget.title), actions: [
           Consumer<SignInAuth>(builder: (context, value, child) {
-            print('consumer build');
             var user = auth.currentUser;
             return user != null
                 ? PopupMenuButton(
