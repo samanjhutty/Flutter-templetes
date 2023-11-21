@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/auth/pages/mobile_login.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
@@ -30,19 +31,26 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => SignInAuth())
         ],
         child: GetMaterialApp(
-            initialRoute: '/',
-            routes: {
-              '/': (p0) => const MyHomePage(),
-              '/mobile': (p0) => const MobileLogin(),
-              '/otppage': (p0) => const OTPPage(),
-              '/profile': (p0) => const UpdateProfile(),
-              '/signin': (p0) => const SignIn(),
-              '/signup': (p0) => const SignUp()
-            },
-            title: 'Firebase Demo',
-            theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true)));
+          initialRoute: '/',
+          routes: {
+            '/': (p0) => const MyHomePage(),
+            '/mobile': (p0) => const MobileLogin(),
+            '/otppage': (p0) => const OTPPage(),
+            '/profile': (p0) => const UpdateProfile(),
+            '/signin': (p0) => const SignIn(),
+            '/signup': (p0) => const SignUp()
+          },
+          title: 'Firebase Demo',
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                  seedColor: Colors.deepPurple, brightness: Brightness.light),
+              useMaterial3: true),
+          darkTheme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                  seedColor: Colors.deepPurple, brightness: Brightness.dark),
+              useMaterial3: true),
+          themeMode: ThemeMode.system,
+        ));
   }
 }
 
@@ -57,16 +65,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
     print('build');
     return Scaffold(
         appBar: AppBar(title: Text(widget.title), actions: [
           Consumer<SignInAuth>(builder: (context, value, child) {
-            return value.user == null
-                ? TextButton.icon(
-                    onPressed: () => Get.toNamed('/signin'),
-                    label: const Text('Sign In'),
-                    icon: const Icon(Icons.login_rounded))
-                : PopupMenuButton(
+            print('consumer build');
+            var user = auth.currentUser;
+            return user != null
+                ? PopupMenuButton(
                     padding: EdgeInsets.zero,
                     child: Row(children: [
                       CircleAvatar(
@@ -102,10 +109,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: const ListTile(
                                   leading: Icon(Icons.delete_forever_rounded),
                                   title: Text('Delete Account')))
-                        ]);
+                        ])
+                : TextButton.icon(
+                    onPressed: () => Get.toNamed('/signin'),
+                    label: const Text('Sign In'),
+                    icon: const Icon(Icons.login_rounded));
           }),
           const SizedBox(width: 16)
         ]),
-        body: const Center(child: Text('Tap on the profile icon to begin')));
+        body: const Center(
+            child: Text(
+          'Tap on the profile icon to begin',
+          style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+        )));
   }
 }

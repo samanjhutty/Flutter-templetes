@@ -17,6 +17,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Material(
       child: Stack(children: [
         Center(
@@ -50,9 +51,9 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               IconButton(
-                icon: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.camera_alt, size: 20)),
+                icon: CircleAvatar(
+                    backgroundColor: scheme.surface,
+                    child: const Icon(Icons.camera_alt, size: 20)),
                 onPressed: () => context.read<ProfileController>().pickImage(),
               )
             ]),

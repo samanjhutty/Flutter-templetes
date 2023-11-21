@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
 import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/material.dart';
@@ -67,14 +66,13 @@ class SignUpAuth extends ChangeNotifier {
     try {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
           verificationId: verifyID, smsCode: phoneOTP);
-      await _auth.signInWithCredential(authCredential).whenComplete(() {
-        notifyListeners();
-        Get.rawSnackbar(message: 'OTP verified');
+      await _auth.signInWithCredential(authCredential);
+      notifyListeners();
+      Get.rawSnackbar(message: 'OTP verified');
 
-        _auth.currentUser!.displayName == null
-            ? Get.toNamed('/profie')
-            : Get.until((route) => route.isFirst);
-      });
+      _auth.currentUser!.displayName == null
+          ? Get.toNamed('/profile')
+          : Get.until((route) => route.isFirst);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
         Get.rawSnackbar(message: 'Invalid code');

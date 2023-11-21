@@ -33,6 +33,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Material(
       child: Center(
           child: SingleChildScrollView(
@@ -79,9 +80,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 ),
               ),
               IconButton(
-                icon: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.camera_alt, size: 20)),
+                icon: CircleAvatar(
+                    backgroundColor: scheme.surface,
+                    child: const Icon(Icons.camera_alt, size: 20)),
                 onPressed: () => context.read<ProfileController>().pickImage(),
               )
             ]),
@@ -117,9 +118,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             width: 24,
                             child: CircularProgressIndicator());
                       });
-
-                      await provider.updateProfile();
-                      Get.until((route) => route.isFirst);
+                      provider.updateProfile();
+                      Navigator.pop(context);
                     },
                     child: btn));
           }),
