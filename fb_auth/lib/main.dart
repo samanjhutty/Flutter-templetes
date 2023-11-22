@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             '/signin': (p0) => const SignIn(),
             '/signup': (p0) => const SignUp()
           },
-          title: 'Firebase Demo',
+          title: 'Firebase Auth',
           theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
                   seedColor: Colors.deepPurple, brightness: Brightness.light),
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
-  final String title = 'Firebase Authentication';
+  final String title = 'FB Auth';
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ]),
                     itemBuilder: (BuildContext context) => [
                           PopupMenuItem(
-                              onTap: () => Get.offAllNamed('/profile'),
+                              onTap: () => Get.offNamed('/profile'),
                               child: const ListTile(
                                   leading: Icon(Icons.edit),
                                   title: Text('Update Profile'))),
