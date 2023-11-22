@@ -35,19 +35,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(widget.title), actions: [
-          TextButton.icon(
-              label: const Text('Add Data'),
-              onPressed: () => Get.to(() => const Material(
-                    child: AddData(),
-                  )),
-              icon: const Icon(Icons.add_rounded)),
-          const SizedBox(width: 16)
-        ]),
-        body: const ShowLiveData(),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.title)),
 
-        ///ShowData() show static data which is fetched through a one-time snapshot of frestore
-        ///for better data views i.e. live data updates use ShowLiveData()
-      );
+      ///ShowData() show static data which is fetched through a one-time snapshot of frestore
+      ///for better data views i.e. live data updates use ShowLiveData()
+      body: const ShowLiveData(),
+
+      floatingActionButton: FloatingActionButton.extended(
+          label: const Text('Add Data'),
+          onPressed: () => Get.to(() => const Material(child: AddData())),
+          icon: const Icon(Icons.add_rounded)),
+    );
+  }
 }

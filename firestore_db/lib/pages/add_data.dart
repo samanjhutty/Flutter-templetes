@@ -118,8 +118,7 @@ class _AddDataState extends State<AddData> {
                           onPressed: () => setState(() {
                                 if (_formKey.currentState!.validate()) {
                                   if (widget.snapshot != null) {
-                                    _dbController.updateData(widget.snapshot
-                                        as DocumentSnapshot<Object?>);
+                                    _dbController.updateData(widget.snapshot!);
                                   } else {
                                     _dbController.addData();
                                   }
