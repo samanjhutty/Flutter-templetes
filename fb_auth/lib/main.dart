@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/auth/pages/mobile_login.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
+import 'package:firebase_authentication/auth/pages/reset_password.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/signin.dart';
 import 'package:firebase_authentication/auth/signup.dart';
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
             '/otppage': (p0) => const OTPPage(),
             '/profile': (p0) => const UpdateProfile(),
             '/signin': (p0) => const SignIn(),
-            '/signup': (p0) => const SignUp()
+            '/signup': (p0) => const SignUp(),
+            '/resetpassword': (p0) => const ResetPassword()
           },
           title: 'Firebase Auth',
           theme: ThemeData(

@@ -19,15 +19,18 @@ class SignUpAuth extends ChangeNotifier {
   String phoneOTP = '';
   String verifyID = '';
 
-  void createAccount() {
+  void createAccount() async {
     _signUpWithEmail(emailAddress.text.trim(), password.text.trim(),
-            confirmPassword.text.trim())
-        .whenComplete(() {
-      emailAddress.clear();
-      password.clear();
-      username.clear();
-      confirmPassword.clear();
-    });
+        confirmPassword.text.trim());
+    await profile.updateProfile();
+    notifyListeners();
+    Get.rawSnackbar(message: 'Account created sucessfully');
+    Get.until((route) => route.isFirst);
+
+    emailAddress.clear();
+    password.clear();
+    username.clear();
+    confirmPassword.clear();
   }
 
   void logout() async {
@@ -73,6 +76,7 @@ class SignUpAuth extends ChangeNotifier {
       _auth.currentUser!.displayName == null
           ? Get.toNamed('/profile')
           : Get.until((route) => route.isFirst);
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
         Get.rawSnackbar(message: 'Invalid code');
@@ -86,15 +90,8 @@ class SignUpAuth extends ChangeNotifier {
       String emailAddress, String password, String cPassword) async {
     try {
       cPassword == password
-          ? await _auth
-              .createUserWithEmailAndPassword(
-                  email: emailAddress, password: cPassword)
-              .whenComplete(() async {
-              Get.rawSnackbar(message: 'Account created sucessfully');
-              await profile.updateProfile();
-              notifyListeners();
-              Get.until((route) => route.isCurrent);
-            })
+          ? await _auth.createUserWithEmailAndPassword(
+              email: emailAddress, password: cPassword)
           : Get.rawSnackbar(message: "Password doesn't match");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

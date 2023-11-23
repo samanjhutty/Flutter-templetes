@@ -28,6 +28,7 @@ class SignInAuth with ChangeNotifier {
   void deleteUser() async {
     await _user!.delete();
     notifyListeners();
+    Get.rawSnackbar(message: 'Account deleted Sucessfully');
   }
 
   Future<void> _signInWithEmail(String email, String password) async {

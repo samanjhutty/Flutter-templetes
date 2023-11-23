@@ -99,6 +99,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               width: myWidth,
               child: TextFormField(
+                  textCapitalization: TextCapitalization.characters,
                   controller: context.read<ProfileController>().username,
                   decoration: const InputDecoration(
                       labelText: 'Enter Name', border: OutlineInputBorder()),
@@ -118,7 +119,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             child: CircularProgressIndicator());
                       });
                       provider.updateProfile();
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, (route) => route.isFirst);
                     },
                     child: btn));
           }),
