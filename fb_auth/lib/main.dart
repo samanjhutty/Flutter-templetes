@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/auth/pages/mobile_login.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
-import 'package:firebase_authentication/auth/pages/reset_password.dart';
+import 'package:firebase_authentication/auth/pages/reauth.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/signin.dart';
 import 'package:firebase_authentication/auth/signup.dart';
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
             '/profile': (p0) => const UpdateProfile(),
             '/signin': (p0) => const SignIn(),
             '/signup': (p0) => const SignUp(),
-            '/resetpassword': (p0) => const ResetPassword()
+            '/reauth': (p0) => const ReAuthenticate()
           },
           title: 'Firebase Auth',
           theme: ThemeData(
@@ -67,48 +66,59 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth auth = FirebaseAuth.instance;
     return Scaffold(
         appBar: AppBar(title: Text(widget.title), actions: [
           Consumer<SignInAuth>(builder: (context, value, child) {
-            var user = auth.currentUser;
+            var user = value.auth.currentUser;
             return user != null
                 ? PopupMenuButton(
+                    position: PopupMenuPosition.under,
                     padding: EdgeInsets.zero,
-                    child: Row(children: [
-                      CircleAvatar(
-                        child: value.user!.photoURL == null
+                    child: CircleAvatar(
+                        child: user.photoURL == null
                             ? const Icon(Icons.person)
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
-                                child: Image.network(
-                                    value.user!.photoURL.toString(),
+                                child: Image.network(user.photoURL.toString(),
                                     height: double.infinity,
                                     width: double.infinity,
                                     fit: BoxFit.cover),
-                              ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(value.user!.displayName == null
-                          ? ''
-                          : value.user!.displayName.toString()),
-                    ]),
-                    itemBuilder: (BuildContext context) => [
+                              )),
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                           PopupMenuItem(
-                              onTap: () => Get.offNamed('/profile'),
-                              child: const ListTile(
-                                  leading: Icon(Icons.edit),
-                                  title: Text('Update Profile'))),
+                              onTap: () => Get.toNamed('/profile'),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                    child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(user.photoURL.toString(),
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover),
+                                )),
+                                title: Text(user.displayName!,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                subtitle: const Text('Tap to Change',
+                                    style: TextStyle(fontSize: 12)),
+                              )),
                           PopupMenuItem(
                               onTap: () => value.logout(),
-                              child: const ListTile(
-                                  leading: Icon(Icons.logout_rounded),
-                                  title: Text('Logout'))),
+                              child: const Row(children: [
+                                Icon(Icons.logout_rounded),
+                                SizedBox(width: 8),
+                                Text('Logout')
+                              ])),
                           PopupMenuItem(
-                              onTap: () => value.deleteUser(),
-                              child: const ListTile(
-                                  leading: Icon(Icons.delete_forever_rounded),
-                                  title: Text('Delete Account')))
+                              onTap: () => Get.toNamed('/reauth',
+                                  arguments: const ReAuthenticate()),
+                              child: const Row(children: [
+                                Icon(Icons.delete_forever_rounded,
+                                    color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Delete Account')
+                              ]))
                         ])
                 : TextButton.icon(
                     onPressed: () => Get.toNamed('/signin'),

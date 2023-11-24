@@ -17,10 +17,7 @@ class _MobileLoginState extends State<MobileLogin> {
 
   @override
   void initState() {
-    btn = const Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [Icon(Icons.arrow_forward_rounded), Text('Get OTP')],
-    );
+    btn = context.read<SignUpAuth>().defaultSubmitBtn();
     super.initState();
   }
 
@@ -65,27 +62,18 @@ class _MobileLoginState extends State<MobileLogin> {
                     Container(
                         padding: const EdgeInsets.only(top: 16),
                         width: myWidth,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16)),
-                            onPressed: () {
-                              context.read<SignUpAuth>().mobileSignIn();
-                              setState(() {
-                                if (context
-                                        .read<SignUpAuth>()
-                                        .phone
-                                        .text
-                                        .length ==
-                                    10) {
-                                  btn = const SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: CircularProgressIndicator());
-                                }
-                              });
-                            },
-                            child: btn)),
+                        child: Consumer<SignUpAuth>(
+                            builder: (context, provider, child) {
+                          return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16)),
+                              onPressed: () {
+                                btn = provider.myAnimation(progress: true);
+                                provider.mobileSignIn();
+                              },
+                              child: btn);
+                        })),
                     Padding(
                         padding: const EdgeInsets.only(top: 16),
                         child: Row(

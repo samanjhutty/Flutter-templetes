@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignInAuth with ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final User? _user = FirebaseAuth.instance.currentUser;
-  User? get user => _user;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -20,26 +18,24 @@ class SignInAuth with ChangeNotifier {
       });
 
   void logout() async {
-    await _auth.signOut();
+    await auth.signOut();
     notifyListeners();
     Get.rawSnackbar(message: 'Logged out Sucessfully');
   }
 
   void deleteUser() async {
-    await _user!.delete();
+    await auth.currentUser!.delete();
     notifyListeners();
     Get.rawSnackbar(message: 'Account deleted Sucessfully');
   }
 
   Future<void> _signInWithEmail(String email, String password) async {
     try {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .whenComplete(() {
-        Get.rawSnackbar(message: 'Logged in Sucessfully');
-        notifyListeners();
-        Get.until((route) => route.isCurrent);
-      });
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+
+      Get.rawSnackbar(message: 'Logged in Sucessfully');
+      notifyListeners();
+      Get.until(ModalRoute.withName('/'));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.rawSnackbar(message: 'No user found for that email.');
@@ -61,7 +57,7 @@ class SignInAuth with ChangeNotifier {
 
       if (kIsWeb) {
         GoogleAuthProvider authProvider = GoogleAuthProvider();
-        await _auth.signInWithPopup(authProvider);
+        await auth.signInWithPopup(authProvider);
         notifyListeners();
       } else {
         final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -71,7 +67,7 @@ class SignInAuth with ChangeNotifier {
         final credential = GoogleAuthProvider.credential(
             accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
-        await _auth.signInWithCredential(credential);
+        await auth.signInWithCredential(credential);
         notifyListeners();
       }
       Get.back();
@@ -80,5 +76,41 @@ class SignInAuth with ChangeNotifier {
       Get.back();
       Get.rawSnackbar(message: 'Something went Wrong, try again!');
     }
+  }
+
+  reauth() async {
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(
+          email: auth.currentUser!.email!, password: password.text);
+      await auth.currentUser!.reauthenticateWithCredential(credential);
+      await auth.currentUser!.delete();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        Get.rawSnackbar(message: 'Wrong Password');
+      } else if (e.code == 'invalid-credential') {
+        Get.rawSnackbar(message: 'Wrong Credentials');
+      }
+    }
+    notifyListeners();
+  }
+
+  defaultSubmitBtn({String title = 'Next'}) =>
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text(title),
+        const SizedBox(width: 8),
+        const Icon(Icons.arrow_forward_rounded)
+      ]);
+
+  myAnimation({String title = 'Next', bool progress = false}) {
+    Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text(title),
+      const SizedBox(width: 8),
+      progress == false
+          ? const Icon(Icons.arrow_forward_rounded)
+          : const SizedBox(
+              height: 24, width: 24, child: CircularProgressIndicator())
+    ]);
+    notifyListeners();
+    return btn;
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class UpdateProfile extends StatefulWidget {
@@ -15,17 +16,14 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> {
   final User? _user = FirebaseAuth.instance.currentUser;
   final double myWidth = 350;
-  late Widget btn;
+  late Widget wgtNext;
 
   @override
   void initState() {
-    btn = const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.arrow_forward_rounded),
-      SizedBox(width: 8),
-      Text('Finish')
-    ]);
+    ProfileController profile = context.read<ProfileController>();
 
-    context.read<ProfileController>().username.text =
+    wgtNext = profile.defaultSubmitBtn(title: 'Update');
+    profile.username.text =
         _user!.displayName != null ? _user!.displayName!.trim() : '';
     super.initState();
   }
@@ -111,17 +109,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16)),
-                    onPressed: () async {
-                      setState(() {
-                        btn = const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator());
-                      });
+                    onPressed: () {
+                      wgtNext =
+                          provider.myAnimation(progress: true, title: 'Update');
                       provider.updateProfile();
-                      Navigator.popUntil(context, (route) => route.isFirst);
+                      wgtNext = provider.myAnimation(title: 'Update');
+                      Get.until(ModalRoute.withName('/'));
                     },
-                    child: btn));
+                    child: wgtNext));
           }),
         ],
       ))),

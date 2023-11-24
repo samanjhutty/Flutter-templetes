@@ -76,6 +76,9 @@ class _SignInState extends State<SignIn> {
                                         .read<SignInAuth>()
                                         .emailAddress
                                         .text);
+                                Get.rawSnackbar(
+                                    message:
+                                        'An email has been sent to your registered email with password reset link');
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'invalid-email') {
                                   Get.rawSnackbar(

@@ -41,8 +41,6 @@ class ProfileController with ChangeNotifier {
               : await ref.putFile(File(pickedfile!.files.single.path!));
           String imageURL = await ref.getDownloadURL();
           await _user!.updatePhotoURL(imageURL);
-          await _user!.updateDisplayName(username.text.trim());
-          mySnackbar('Profile Updated');
         } else {
           mySnackbar('No Image Selected!');
         }
@@ -52,6 +50,29 @@ class ProfileController with ChangeNotifier {
         mySnackbar('something unexpected occured!');
       }
     }
+    await _user!.updateDisplayName(username.text.trim());
+    notifyListeners();
+    mySnackbar('Profile Updated');
+  }
+
+  defaultSubmitBtn({String title = 'Next'}) =>
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text(title),
+        const SizedBox(width: 8),
+        const Icon(Icons.arrow_forward_rounded)
+      ]);
+
+  myAnimation({String title = 'Next', bool progress = false}) {
+    Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text(title),
+      const SizedBox(width: 8),
+      progress == false
+          ? const Icon(Icons.arrow_forward_rounded)
+          : const SizedBox(
+              height: 24, width: 24, child: CircularProgressIndicator())
+    ]);
+    notifyListeners();
+    return btn;
   }
 
   mySnackbar(String text) async {
