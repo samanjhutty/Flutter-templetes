@@ -50,6 +50,8 @@ class SignUpAuth extends ChangeNotifier {
             Get.rawSnackbar(message: 'The provided phone number is not valid');
           } else if (e.code == 'invalid-verification-code') {
             Get.rawSnackbar(message: 'Invalid code');
+          } else if (e.code == 'too-many-requests') {
+            Get.rawSnackbar(message: 'Too many requests, try after sometime');
           }
         },
         codeSent: (String verificationID, int? resendCode) {

@@ -150,6 +150,8 @@ class SignInAuth with ChangeNotifier {
         Get.rawSnackbar(message: 'Wrong Password, try again');
       } else if (e.code == 'invalid-credential') {
         Get.rawSnackbar(message: 'Wrong Credentials, try again');
+      } else if (e.code == 'too-many-requests') {
+        Get.rawSnackbar(message: 'Too many requests, try after sometime');
       }
     }
     Get.until(ModalRoute.withName('/'));
