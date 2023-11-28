@@ -64,17 +64,15 @@ class _MobileLoginState extends State<MobileLogin> {
                     Container(
                         padding: const EdgeInsets.only(top: 16),
                         width: myWidth,
-                        child: Consumer<SignUpAuth>(
+                        child: Consumer<MyWidgets>(
                             builder: (context, provider, child) {
                           return ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16)),
                               onPressed: () {
-                                btn = context
-                                    .watch<MyWidgets>()
-                                    .myAnimation(progress: true);
-                                provider.mobileSignIn();
+                                btn = provider.myAnimation(progress: true);
+                                context.read<SignUpAuth>().mobileSignIn();
                               },
                               child: btn);
                         })),
