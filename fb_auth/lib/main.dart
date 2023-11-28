@@ -5,7 +5,7 @@ import 'package:firebase_authentication/auth/pages/reauth.dart';
 import 'package:firebase_authentication/auth/pages/update_profile.dart';
 import 'package:firebase_authentication/auth/signin.dart';
 import 'package:firebase_authentication/auth/signup.dart';
-import 'package:firebase_authentication/provider/profileimage_controller.dart';
+import 'package:firebase_authentication/provider/profile_controller.dart';
 import 'package:firebase_authentication/provider/signin_controller.dart';
 import 'package:firebase_authentication/provider/signup_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
