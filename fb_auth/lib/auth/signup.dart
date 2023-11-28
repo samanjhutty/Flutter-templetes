@@ -70,7 +70,7 @@ class _SignUpState extends State<SignUp> {
                   child: TextFormField(
                     controller: context.watch<SignUpAuth>().username,
                     keyboardType: TextInputType.name,
-                    textCapitalization: TextCapitalization.characters,
+                    textCapitalization: TextCapitalization.words,
                     decoration: const InputDecoration(
                         labelText: 'Enter Name', border: OutlineInputBorder()),
                   )),

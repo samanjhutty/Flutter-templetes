@@ -97,7 +97,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               width: myWidth,
               child: TextFormField(
-                  textCapitalization: TextCapitalization.characters,
+                  textCapitalization: TextCapitalization.words,
                   controller: context.read<ProfileController>().username,
                   decoration: const InputDecoration(
                       labelText: 'Enter Name', border: OutlineInputBorder()),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/auth/pages/mobile_login.dart';
 import 'package:firebase_authentication/auth/pages/otp_page.dart';
 import 'package:firebase_authentication/auth/pages/reauth.dart';
@@ -111,8 +112,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Text('Logout')
                               ])),
                           PopupMenuItem(
-                              onTap: () => Get.toNamed('/reauth',
-                                  arguments: const ReAuthenticate()),
+                              onTap: () {
+                                final authrovider = FirebaseAuth.instance
+                                    .currentUser!.providerData[0].providerId;
+                                if (authrovider == 'phone' ||
+                                    authrovider == 'password') {
+                                  Get.toNamed('/reauth');
+                                } else {
+                                  Get.rawSnackbar(
+                                      message: 'Please wait for a few seconds');
+                                  value.reauth();
+                                }
+                              },
                               child: const Row(children: [
                                 Icon(Icons.delete_forever_rounded,
                                     color: Colors.red),

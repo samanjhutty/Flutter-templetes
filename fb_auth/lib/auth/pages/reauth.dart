@@ -46,7 +46,7 @@ class _ReAuthenticateState extends State<ReAuthenticate> {
                       controller: context.read<SignInAuth>().password,
                       obscureText: true,
                       decoration: const InputDecoration(
-                          labelText: 'Enter Password',
+                          labelText: 'Enter Password/OTP',
                           border: OutlineInputBorder()),
                       keyboardType: TextInputType.name)),
               Consumer<SignInAuth>(builder: (context, provider, child) {

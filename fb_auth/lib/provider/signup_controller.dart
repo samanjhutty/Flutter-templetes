@@ -76,7 +76,6 @@ class SignUpAuth extends ChangeNotifier {
       _auth.currentUser!.displayName == null
           ? Get.toNamed('/profile')
           : Get.until((route) => route.isFirst);
-      notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
         Get.rawSnackbar(message: 'Invalid code');

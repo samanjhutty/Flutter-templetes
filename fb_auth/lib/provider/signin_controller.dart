@@ -29,6 +29,8 @@ class SignInAuth with ChangeNotifier {
     Get.rawSnackbar(message: 'Account deleted Sucessfully');
   }
 
+  void refresh() => notifyListeners();
+
   Future<void> _signInWithEmail(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
@@ -51,7 +53,7 @@ class SignInAuth with ChangeNotifier {
 
   Future<void> googleLogin() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn(
+      final GoogleSignIn googleSignInID = GoogleSignIn(
           clientId:
               '226438241533-45d1a9rkmihcvgjf3d9ol9c04h54669u.apps.googleusercontent.com');
 
@@ -60,12 +62,12 @@ class SignInAuth with ChangeNotifier {
         await auth.signInWithPopup(authProvider);
         notifyListeners();
       } else {
-        final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+        final GoogleSignInAccount? googleUser = await googleSignInID.signIn();
         final GoogleSignInAuthentication? googleAuth =
             await googleUser?.authentication;
 
         final credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+            accessToken: googleAuth!.accessToken, idToken: googleAuth.idToken);
 
         await auth.signInWithCredential(credential);
         notifyListeners();
@@ -78,11 +80,73 @@ class SignInAuth with ChangeNotifier {
     }
   }
 
-  reauth() async {
+  Future<void> reauth() async {
     try {
-      AuthCredential credential = EmailAuthProvider.credential(
-          email: auth.currentUser!.email!, password: password.text);
-      await auth.currentUser!.reauthenticateWithCredential(credential);
+      final authrovider = auth.currentUser!.providerData[0].providerId;
+      late AuthCredential credential;
+
+      switch (authrovider) {
+        case 'google.com':
+          {
+            final GoogleSignIn googleSignInID = GoogleSignIn(
+                clientId:
+                    '226438241533-45d1a9rkmihcvgjf3d9ol9c04h54669u.apps.googleusercontent.com');
+            if (kIsWeb) {
+              GoogleAuthProvider authProvider = GoogleAuthProvider();
+              await auth.currentUser!.reauthenticateWithPopup(authProvider);
+            } else {
+              final GoogleSignInAccount? googleUser =
+                  await googleSignInID.signIn();
+              final GoogleSignInAuthentication? googleAuth =
+                  await googleUser?.authentication;
+
+              credential = GoogleAuthProvider.credential(
+                  accessToken: googleAuth!.accessToken,
+                  idToken: googleAuth.idToken);
+              await auth.currentUser!.reauthenticateWithCredential(credential);
+            }
+          }
+          break;
+        case 'password':
+          {
+            credential = EmailAuthProvider.credential(
+                email: auth.currentUser!.email!, password: password.text);
+            await auth.currentUser!.reauthenticateWithCredential(credential);
+          }
+          break;
+        case 'phone':
+          {
+            String verifyID = '';
+            await auth.verifyPhoneNumber(
+                phoneNumber: auth.currentUser!.phoneNumber,
+                verificationCompleted: (PhoneAuthCredential authCredential) {},
+                verificationFailed: (FirebaseAuthException e) {
+                  if (e.code == 'invalid-verification-code') {
+                    Get.rawSnackbar(message: 'Invalid code');
+                  }
+                },
+                codeSent: (String verificationID, int? resendCode) {
+                  verifyID = verificationID;
+                  Get.rawSnackbar(
+                      message: 'OTP has been sent to your mobile number');
+                },
+                codeAutoRetrievalTimeout: (String verificationId) {});
+
+            try {
+              PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
+                  verificationId: verifyID, smsCode: password.text);
+              await auth.signInWithCredential(authCredential);
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'invalid-verification-code') {
+                Get.rawSnackbar(message: 'Invalid code');
+              }
+            }
+          }
+          break;
+        default:
+          Get.rawSnackbar(message: 'Provider is Unknown');
+      }
+
       await auth.currentUser!.delete();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
@@ -92,16 +156,17 @@ class SignInAuth with ChangeNotifier {
       }
     }
     notifyListeners();
+    Get.until(ModalRoute.withName('/'));
   }
 
-  defaultSubmitBtn({String title = 'Next'}) =>
+  submitBtn({String title = 'Next'}) =>
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text(title),
         const SizedBox(width: 8),
         const Icon(Icons.arrow_forward_rounded)
       ]);
 
-  myAnimation({String title = 'Next', bool progress = false}) {
+  animatedSubmtBtn({String title = 'Next', bool progress = false}) {
     Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text(title),
       const SizedBox(width: 8),

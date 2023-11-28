@@ -16,7 +16,7 @@ class OTPPage extends StatefulWidget {
 
 class _OTPPageState extends State<OTPPage> {
   bool timerEnabled = true;
-  int seconds = 30;
+  static int seconds = 30;
   Timer? timer;
   List<Widget>? list;
 
@@ -83,6 +83,7 @@ class _OTPPageState extends State<OTPPage> {
                                   ? null
                                   : () {
                                       context.read<SignUpAuth>().mobileSignIn();
+                                      seconds = 30;
                                       timer;
                                     },
                               child: const Text('Resend OTP')),
