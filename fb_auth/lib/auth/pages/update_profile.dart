@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_authentication/assets/my_widgets.dart';
-import 'package:firebase_authentication/provider/profile_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import '../../assets/my_widgets.dart';
+import '../../provider/profile_controller.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key});

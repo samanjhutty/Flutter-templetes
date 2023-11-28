@@ -16,8 +16,10 @@ class _SignInState extends State<SignIn> {
   final double myWidth = 350;
   @override
   void initState() {
-    context.read<SignInAuth>().password.clear();
-    context.read<SignInAuth>().emailAddress.clear();
+    final provider = context.read<SignInAuth>();
+
+    provider.password.clear();
+    provider.emailAddress.clear();
 
     super.initState();
   }

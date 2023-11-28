@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_authentication/assets/my_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../assets/my_widgets.dart';
 
 class ProfileController with ChangeNotifier {
   MyWidgets widgets = Get.put(MyWidgets());

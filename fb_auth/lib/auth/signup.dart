@@ -1,8 +1,8 @@
-import 'package:firebase_authentication/provider/profile_controller.dart';
-import 'package:firebase_authentication/provider/signup_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../provider/profile_controller.dart';
+import '../provider/signup_controller.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -16,10 +16,12 @@ class _SignUpState extends State<SignUp> {
   final double boxHeight = 20;
   @override
   void initState() {
-    context.read<SignUpAuth>().username.clear();
-    context.read<SignUpAuth>().emailAddress.clear();
-    context.read<SignUpAuth>().password.clear();
-    context.read<SignUpAuth>().confirmPassword.clear();
+    final provider = context.read<SignUpAuth>();
+
+    provider.username.clear();
+    provider.emailAddress.clear();
+    provider.password.clear();
+    provider.confirmPassword.clear();
     super.initState();
   }
 
