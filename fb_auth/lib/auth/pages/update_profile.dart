@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_authentication/assets/my_widgets.dart';
 import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   void initState() {
     ProfileController profile = context.read<ProfileController>();
 
-    wgtNext = profile.defaultSubmitBtn(title: 'Update');
+    wgtNext = context.read<MyWidgets>().defaultSubmitBtn(title: 'Update');
     profile.username.text =
         _user!.displayName != null ? _user!.displayName!.trim() : '';
     super.initState();
@@ -110,10 +111,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16)),
                     onPressed: () {
-                      wgtNext =
-                          provider.myAnimation(progress: true, title: 'Update');
+                      wgtNext = context
+                          .watch<MyWidgets>()
+                          .myAnimation(progress: true, title: 'Update');
                       provider.updateProfile();
-                      wgtNext = provider.myAnimation(title: 'Update');
+                      wgtNext = context
+                          .watch<MyWidgets>()
+                          .myAnimation(title: 'Update');
                       Get.until(ModalRoute.withName('/'));
                     },
                     child: wgtNext));

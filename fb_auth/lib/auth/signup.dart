@@ -14,6 +14,14 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final double myWidth = 350;
   final double boxHeight = 20;
+  @override
+  void initState() {
+    context.read<SignUpAuth>().username.clear();
+    context.read<SignUpAuth>().emailAddress.clear();
+    context.read<SignUpAuth>().password.clear();
+    context.read<SignUpAuth>().confirmPassword.clear();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

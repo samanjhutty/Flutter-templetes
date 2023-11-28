@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_authentication/auth/pages/otp_page.dart';
 import 'package:firebase_authentication/provider/profileimage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +24,7 @@ class SignUpAuth extends ChangeNotifier {
     await profile.updateProfile();
     notifyListeners();
     Get.rawSnackbar(message: 'Account created sucessfully');
-    Get.until((route) => route.isFirst);
+    Get.until(ModalRoute.withName('/'));
 
     emailAddress.clear();
     password.clear();
@@ -54,7 +53,7 @@ class SignUpAuth extends ChangeNotifier {
           }
         },
         codeSent: (String verificationID, int? resendCode) {
-          Get.to(() => const Material(child: OTPPage()));
+          Get.toNamed('otppage');
           verifyID = verificationID;
           String numberOBS = phone.text.substring(6);
           shadowedPhone = 'XXXXXX$numberOBS';
@@ -75,7 +74,7 @@ class SignUpAuth extends ChangeNotifier {
 
       _auth.currentUser!.displayName == null
           ? Get.toNamed('/profile')
-          : Get.until((route) => route.isFirst);
+          : Get.until(ModalRoute.withName('/'));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
         Get.rawSnackbar(message: 'Invalid code');
@@ -103,25 +102,5 @@ class SignUpAuth extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
-  }
-
-  defaultSubmitBtn({String title = 'Next'}) =>
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(title),
-        const SizedBox(width: 8),
-        const Icon(Icons.arrow_forward_rounded)
-      ]);
-
-  myAnimation({String title = 'Next', bool progress = false}) {
-    Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text(title),
-      const SizedBox(width: 8),
-      progress == false
-          ? const Icon(Icons.arrow_forward_rounded)
-          : const SizedBox(
-              height: 24, width: 24, child: CircularProgressIndicator())
-    ]);
-    notifyListeners();
-    return btn;
   }
 }

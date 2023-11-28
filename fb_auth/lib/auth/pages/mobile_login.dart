@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_authentication/assets/my_widgets.dart';
 import 'package:firebase_authentication/provider/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,8 @@ class _MobileLoginState extends State<MobileLogin> {
 
   @override
   void initState() {
-    btn = context.read<SignUpAuth>().defaultSubmitBtn();
+    context.read<SignUpAuth>().phone.clear();
+    btn = context.read<MyWidgets>().defaultSubmitBtn();
     super.initState();
   }
 
@@ -69,7 +71,9 @@ class _MobileLoginState extends State<MobileLogin> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16)),
                               onPressed: () {
-                                btn = provider.myAnimation(progress: true);
+                                btn = context
+                                    .watch<MyWidgets>()
+                                    .myAnimation(progress: true);
                                 provider.mobileSignIn();
                               },
                               child: btn);

@@ -14,6 +14,13 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final auth = FirebaseAuth.instance;
   final double myWidth = 350;
+  @override
+  void initState() {
+    context.read<SignInAuth>().password.clear();
+    context.read<SignInAuth>().emailAddress.clear();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

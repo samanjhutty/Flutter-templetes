@@ -112,12 +112,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Text('Logout')
                               ])),
                           PopupMenuItem(
-                              onTap: () {
+                              onTap: () async {
                                 final authrovider = FirebaseAuth.instance
                                     .currentUser!.providerData[0].providerId;
-                                if (authrovider == 'phone' ||
-                                    authrovider == 'password') {
+                                if (authrovider == 'password') {
                                   Get.toNamed('/reauth');
+                                } else if (authrovider == 'phone') {
+                                  value.sendOTP();
                                 } else {
                                   Get.rawSnackbar(
                                       message: 'Please wait for a few seconds');

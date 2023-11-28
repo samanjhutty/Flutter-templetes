@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class SignInAuth with ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  String verifyID = '';
 
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -75,9 +76,24 @@ class SignInAuth with ChangeNotifier {
       Get.back();
       Get.rawSnackbar(message: 'Logged in via Google');
     } on FirebaseAuthException {
-      Get.back();
+      Get.until(ModalRoute.withName('/'));
       Get.rawSnackbar(message: 'Something went Wrong, try again!');
     }
+  }
+
+  sendOTP() async {
+    await auth.verifyPhoneNumber(
+        phoneNumber: auth.currentUser!.phoneNumber,
+        verificationCompleted: (PhoneAuthCredential authCredential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationID, int? resendCode) {
+          Get.toNamed('/reauth');
+          verifyID = verificationID;
+          Get.rawSnackbar(
+              message:
+                  'OTP has been sent to your mobile number ${auth.currentUser!.phoneNumber}');
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {});
   }
 
   Future<void> reauth() async {
@@ -116,31 +132,9 @@ class SignInAuth with ChangeNotifier {
           break;
         case 'phone':
           {
-            String verifyID = '';
-            await auth.verifyPhoneNumber(
-                phoneNumber: auth.currentUser!.phoneNumber,
-                verificationCompleted: (PhoneAuthCredential authCredential) {},
-                verificationFailed: (FirebaseAuthException e) {
-                  if (e.code == 'invalid-verification-code') {
-                    Get.rawSnackbar(message: 'Invalid code');
-                  }
-                },
-                codeSent: (String verificationID, int? resendCode) {
-                  verifyID = verificationID;
-                  Get.rawSnackbar(
-                      message: 'OTP has been sent to your mobile number');
-                },
-                codeAutoRetrievalTimeout: (String verificationId) {});
-
-            try {
-              PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
-                  verificationId: verifyID, smsCode: password.text);
-              await auth.signInWithCredential(authCredential);
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'invalid-verification-code') {
-                Get.rawSnackbar(message: 'Invalid code');
-              }
-            }
+            PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
+                verificationId: verifyID, smsCode: password.text);
+            await auth.signInWithCredential(authCredential);
           }
           break;
         default:
@@ -148,34 +142,16 @@ class SignInAuth with ChangeNotifier {
       }
 
       await auth.currentUser!.delete();
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        Get.rawSnackbar(message: 'Wrong Password');
+      if (e.code == 'invalid-verification-code') {
+        Get.rawSnackbar(message: 'Invalid code, try again');
+      } else if (e.code == 'wrong-password') {
+        Get.rawSnackbar(message: 'Wrong Password, try again');
       } else if (e.code == 'invalid-credential') {
-        Get.rawSnackbar(message: 'Wrong Credentials');
+        Get.rawSnackbar(message: 'Wrong Credentials, try again');
       }
     }
-    notifyListeners();
     Get.until(ModalRoute.withName('/'));
-  }
-
-  submitBtn({String title = 'Next'}) =>
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(title),
-        const SizedBox(width: 8),
-        const Icon(Icons.arrow_forward_rounded)
-      ]);
-
-  animatedSubmtBtn({String title = 'Next', bool progress = false}) {
-    Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text(title),
-      const SizedBox(width: 8),
-      progress == false
-          ? const Icon(Icons.arrow_forward_rounded)
-          : const SizedBox(
-              height: 24, width: 24, child: CircularProgressIndicator())
-    ]);
-    notifyListeners();
-    return btn;
   }
 }

@@ -84,6 +84,7 @@ class _OTPPageState extends State<OTPPage> {
                                   : () {
                                       context.read<SignUpAuth>().mobileSignIn();
                                       seconds = 30;
+                                      setState(() {});
                                       timer;
                                     },
                               child: const Text('Resend OTP')),

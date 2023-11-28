@@ -42,7 +42,7 @@ class _ReAuthenticateState extends State<ReAuthenticate> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   width: myWidth,
                   child: TextFormField(
-                      textCapitalization: TextCapitalization.characters,
+                      textCapitalization: TextCapitalization.words,
                       controller: context.read<SignInAuth>().password,
                       obscureText: true,
                       decoration: const InputDecoration(
