@@ -126,6 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 if (authrovider == 'password') {
                                   Get.toNamed('/reauth');
                                 } else if (authrovider == 'phone') {
+                                  Get.rawSnackbar(
+                                      message: 'Please wait for a few seconds');
                                   await value.sendOTP();
                                 } else {
                                   Get.rawSnackbar(

@@ -85,7 +85,11 @@ class SignInAuth with ChangeNotifier {
     await auth.verifyPhoneNumber(
         phoneNumber: auth.currentUser!.phoneNumber,
         verificationCompleted: (PhoneAuthCredential authCredential) {},
-        verificationFailed: (FirebaseAuthException e) {},
+        verificationFailed: (FirebaseAuthException e) {
+          if (e.code == 'too-many-requests') {
+            Get.rawSnackbar(message: 'Too many requests, try after sometime');
+          }
+        },
         codeSent: (String verificationID, int? resendCode) {
           Get.toNamed('/reauth');
           verifyID = verificationID;
@@ -124,17 +128,27 @@ class SignInAuth with ChangeNotifier {
           }
           break;
         case 'password':
-          {
+          try {
             credential = EmailAuthProvider.credential(
                 email: auth.currentUser!.email!, password: password.text);
             await auth.currentUser!.reauthenticateWithCredential(credential);
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'wrong-password') {
+              Get.rawSnackbar(message: 'Wrong password entered, try again');
+            }
           }
           break;
         case 'phone':
-          {
+          try {
             PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
                 verificationId: verifyID, smsCode: password.text);
             await auth.signInWithCredential(authCredential);
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'invalid-verification-code') {
+              Get.rawSnackbar(message: 'Invalid code');
+            } else if (e.code == 'too-many-requests') {
+              Get.rawSnackbar(message: 'Too many requests, try after sometime');
+            }
           }
           break;
         default:
