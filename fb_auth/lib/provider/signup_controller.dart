@@ -18,8 +18,8 @@ class SignUpAuth extends ChangeNotifier {
   String phoneOTP = '';
   String verifyID = '';
 
-  void createAccount() async {
-    _signUpWithEmail(emailAddress.text.trim(), password.text.trim(),
+  Future<void> createAccount() async {
+    await _signUpWithEmail(emailAddress.text.trim(), password.text.trim(),
         confirmPassword.text.trim());
     await profile.updateProfile();
     notifyListeners();
@@ -32,13 +32,15 @@ class SignUpAuth extends ChangeNotifier {
     confirmPassword.clear();
   }
 
-  void logout() async {
+  Future<void> logout() async {
     await _auth.signOut();
     notifyListeners();
     Get.rawSnackbar(message: 'Logged out Sucessfully');
   }
 
-  void mobileSignIn() async {
+  refresh() => notifyListeners();
+
+  Future<void> mobileSignIn() async {
     await _auth.verifyPhoneNumber(
         phoneNumber: countryCode + phone.text,
         verificationCompleted: (PhoneAuthCredential authCredential) {
@@ -55,7 +57,7 @@ class SignUpAuth extends ChangeNotifier {
           }
         },
         codeSent: (String verificationID, int? resendCode) {
-          Get.toNamed('otppage');
+          Get.toNamed('/otppage');
           verifyID = verificationID;
           String numberOBS = phone.text.substring(6);
           shadowedPhone = 'XXXXXX$numberOBS';
@@ -66,7 +68,7 @@ class SignUpAuth extends ChangeNotifier {
         codeAutoRetrievalTimeout: (String verificationId) {});
   }
 
-  void verifyMobile() async {
+  Future<void> verifyMobile() async {
     try {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
           verificationId: verifyID, smsCode: phoneOTP);

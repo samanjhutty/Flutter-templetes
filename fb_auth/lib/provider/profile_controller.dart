@@ -27,7 +27,9 @@ class ProfileController with ChangeNotifier {
     }
   }
 
-  updateProfile() async {
+  void refresh() => notifyListeners();
+
+  Future<void> updateProfile() async {
     if (image != null || webImage != null) {
       try {
         storage.FirebaseStorage fbStorage = storage.FirebaseStorage.instance;
@@ -52,8 +54,21 @@ class ProfileController with ChangeNotifier {
         widgets.mySnackbar('something unexpected occured!');
       }
     }
-    await _user!.updateDisplayName(username.text.trim());
+    await _user!.updateDisplayName(username.text);
     notifyListeners();
     widgets.mySnackbar('Profile Updated');
+  }
+
+  myAnimation({String title = 'Next', bool progress = false}) {
+    Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text(title),
+      const SizedBox(width: 8),
+      progress == false
+          ? const Icon(Icons.arrow_forward_rounded)
+          : const SizedBox(
+              height: 24, width: 24, child: CircularProgressIndicator())
+    ]);
+    notifyListeners();
+    return btn;
   }
 }

@@ -70,9 +70,9 @@ class _MobileLoginState extends State<MobileLogin> {
                               style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 16)),
-                              onPressed: () {
+                              onPressed: () async {
                                 btn = provider.myAnimation(progress: true);
-                                context.read<SignUpAuth>().mobileSignIn();
+                                await context.read<SignUpAuth>().mobileSignIn();
                               },
                               child: btn);
                         })),

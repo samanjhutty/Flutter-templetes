@@ -122,8 +122,8 @@ class _SignUpState extends State<SignUp> {
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16)),
-                      onPressed: () =>
-                          context.read<SignUpAuth>().createAccount(),
+                      onPressed: () async =>
+                          await context.read<SignUpAuth>().createAccount(),
                       icon: const Icon(Icons.arrow_forward_rounded),
                       label: const Text('Create Account'))),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [

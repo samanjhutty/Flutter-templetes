@@ -103,18 +103,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   decoration: const InputDecoration(
                       labelText: 'Enter Name', border: OutlineInputBorder()),
                   keyboardType: TextInputType.name)),
-          Consumer<MyWidgets>(builder: (context, provider, child) {
+          Consumer<ProfileController>(builder: (context, provider, child) {
             return Container(
                 padding: const EdgeInsets.only(top: 16),
                 width: myWidth,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16)),
-                    onPressed: () {
-                      wgtNext =
-                          provider.myAnimation(progress: true, title: 'Update');
-                      context.watch<ProfileController>().updateProfile();
-                      wgtNext = provider.myAnimation(title: 'Update');
+                    onPressed: () async {
+                      await provider.updateProfile();
                       Get.until(ModalRoute.withName('/'));
                     },
                     child: wgtNext));

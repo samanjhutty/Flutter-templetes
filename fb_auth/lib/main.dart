@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_authentication/assets/my_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => ProfileController()),
           ChangeNotifierProvider(create: (context) => SignUpAuth()),
-          ChangeNotifierProvider(create: (context) => SignInAuth())
+          ChangeNotifierProvider(create: (context) => SignInAuth()),
+          ChangeNotifierProvider(create: (context) => MyWidgets())
         ],
         child: GetMaterialApp(
           initialRoute: '/',
@@ -70,9 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(title: Text(widget.title), actions: [
           Consumer<SignInAuth>(builder: (context, value, child) {
-            var user = value.auth.currentUser;
+            var user = FirebaseAuth.instance.currentUser;
             return user != null
                 ? PopupMenuButton(
+                    onOpened: () => value.refresh(),
                     position: PopupMenuPosition.under,
                     padding: EdgeInsets.zero,
                     child: CircleAvatar(
@@ -92,12 +95,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                 leading: CircleAvatar(
                                     child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(user.photoURL.toString(),
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover),
+                                  child: user.photoURL == null
+                                      ? const Icon(Icons.person)
+                                      : Image.network(user.photoURL.toString(),
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover),
                                 )),
-                                title: Text(user.displayName!,
+                                title: Text(
+                                    user.photoURL == null
+                                        ? 'Username'
+                                        : user.displayName!,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18)),
@@ -105,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     style: TextStyle(fontSize: 12)),
                               )),
                           PopupMenuItem(
-                              onTap: () => value.logout(),
+                              onTap: () async => await value.logout(),
                               child: const Row(children: [
                                 Icon(Icons.logout_rounded),
                                 SizedBox(width: 8),
@@ -118,11 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 if (authrovider == 'password') {
                                   Get.toNamed('/reauth');
                                 } else if (authrovider == 'phone') {
-                                  value.sendOTP();
+                                  await value.sendOTP();
                                 } else {
                                   Get.rawSnackbar(
                                       message: 'Please wait for a few seconds');
-                                  value.reauth();
+                                  await value.reauth();
                                 }
                               },
                               child: const Row(children: [

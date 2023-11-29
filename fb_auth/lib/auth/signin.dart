@@ -110,7 +110,8 @@ class _SignInState extends State<SignIn> {
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16)),
-                      onPressed: () => context.read<SignInAuth>().emailLogin(),
+                      onPressed: () async =>
+                          await context.read<SignInAuth>().emailLogin(),
                       icon: const Icon(Icons.arrow_forward_rounded),
                       label: const Text('Login'))),
               const Padding(
@@ -145,8 +146,9 @@ class _SignInState extends State<SignIn> {
                         CircleAvatar(
                             child: IconButton(
                                 tooltip: 'Google',
-                                onPressed: () =>
-                                    context.read<SignInAuth>().googleLogin(),
+                                onPressed: () async => await context
+                                    .read<SignInAuth>()
+                                    .googleLogin(),
                                 icon: Image.asset(
                                     'lib/assets/images/google.png')))
                       ])),
@@ -156,7 +158,7 @@ class _SignInState extends State<SignIn> {
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Text("Don't have an Account yet?"),
                   TextButton(
-                      onPressed: () => Navigator.pushNamed(context, '/signup'),
+                      onPressed: () => Get.toNamed('/signup'),
                       child: const Text('Sign Up'))
                 ]),
               )

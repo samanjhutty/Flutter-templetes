@@ -56,8 +56,8 @@ class _ReAuthenticateState extends State<ReAuthenticate> {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16)),
-                      onPressed: () {
-                        provider.reauth();
+                      onPressed: () async {
+                        await provider.reauth();
                         Get.until(ModalRoute.withName('/'));
                       },
                       label: const Text('Delete Account'),

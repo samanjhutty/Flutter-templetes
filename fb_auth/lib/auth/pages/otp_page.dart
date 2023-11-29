@@ -81,8 +81,10 @@ class _OTPPageState extends State<OTPPage> {
                           TextButton(
                               onPressed: timerEnabled
                                   ? null
-                                  : () {
-                                      context.read<SignUpAuth>().mobileSignIn();
+                                  : () async {
+                                      await context
+                                          .read<SignUpAuth>()
+                                          .mobileSignIn();
                                       seconds = 30;
                                       setState(() {});
                                       timer;

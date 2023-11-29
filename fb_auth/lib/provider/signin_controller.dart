@@ -11,20 +11,20 @@ class SignInAuth with ChangeNotifier {
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  void emailLogin() =>
-      _signInWithEmail(emailAddress.text.trim(), password.text.trim())
+  Future<void> emailLogin() async =>
+      await _signInWithEmail(emailAddress.text.trim(), password.text.trim())
           .whenComplete(() {
         emailAddress.clear();
         password.clear();
       });
 
-  void logout() async {
+  Future<void> logout() async {
     await auth.signOut();
     notifyListeners();
     Get.rawSnackbar(message: 'Logged out Sucessfully');
   }
 
-  void deleteUser() async {
+  Future<void> deleteUser() async {
     await auth.currentUser!.delete();
     notifyListeners();
     Get.rawSnackbar(message: 'Account deleted Sucessfully');
@@ -81,7 +81,7 @@ class SignInAuth with ChangeNotifier {
     }
   }
 
-  sendOTP() async {
+  Future<void> sendOTP() async {
     await auth.verifyPhoneNumber(
         phoneNumber: auth.currentUser!.phoneNumber,
         verificationCompleted: (PhoneAuthCredential authCredential) {},
