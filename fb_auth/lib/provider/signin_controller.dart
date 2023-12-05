@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +104,7 @@ class SignInAuth with ChangeNotifier {
   Future<void> reauth() async {
     try {
       final authrovider = auth.currentUser!.providerData[0].providerId;
+      storage.FirebaseStorage fbStorage = storage.FirebaseStorage.instance;
       late AuthCredential credential;
 
       switch (authrovider) {
@@ -154,7 +156,11 @@ class SignInAuth with ChangeNotifier {
         default:
           Get.rawSnackbar(message: 'Provider is Unknown');
       }
+      storage.Reference refRoot = fbStorage.ref().child('USER-profileImage');
+      storage.Reference ref =
+          refRoot.child('profileImage${auth.currentUser!.uid}.jpg');
 
+      await ref.delete();
       await auth.currentUser!.delete();
       notifyListeners();
     } on FirebaseAuthException catch (e) {

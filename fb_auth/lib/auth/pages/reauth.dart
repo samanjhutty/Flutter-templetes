@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_authentication/assets/my_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,15 @@ class ReAuthenticate extends StatefulWidget {
 class _ReAuthenticateState extends State<ReAuthenticate> {
   final double myWidth = 350;
   final formKey = GlobalKey<FormState>();
+  Widget? wgtNext;
+
+  @override
+  void initState() {
+    wgtNext = context
+        .read<MyWidgets>()
+        .defaultSubmitBtn(title: 'Delete Account', icon: Icons.delete_rounded);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +63,9 @@ class _ReAuthenticateState extends State<ReAuthenticate> {
                               .text
                               .isEmpty) {
                             return 'Password/OTP cannot be empty';
+                          } else {
+                            return null;
                           }
-                          return null;
                         },
                         textCapitalization: TextCapitalization.words,
                         controller: context.read<SignInAuth>().password,
@@ -63,21 +74,28 @@ class _ReAuthenticateState extends State<ReAuthenticate> {
                             labelText: 'Enter Password/OTP',
                             border: OutlineInputBorder()),
                         keyboardType: TextInputType.name)),
-                Consumer<SignInAuth>(builder: (context, provider, child) {
+                Consumer2<SignInAuth, MyWidgets>(
+                    builder: (context, singin, mywidgets, child) {
                   return Container(
                       padding: const EdgeInsets.only(top: 16),
                       width: myWidth,
-                      child: ElevatedButton.icon(
+                      child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16)),
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            await provider.reauth();
+                            wgtNext = mywidgets.myAnimation(
+                                title: 'Delete Account',
+                                progress: true,
+                                icon: Icons.delete_rounded);
+                            await singin.reauth();
+                            wgtNext = mywidgets.myAnimation(
+                                title: 'Delete Account',
+                                icon: Icons.delete_rounded);
                             Get.until(ModalRoute.withName('/'));
                           }
                         },
-                        label: const Text('Delete Account'),
-                        icon: const Icon(Icons.delete_rounded),
+                        child: wgtNext,
                       ));
                 }),
               ]),

@@ -1,20 +1,28 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyWidgets extends ChangeNotifier {
-  defaultSubmitBtn({String title = 'Next'}) =>
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(title),
-        const SizedBox(width: 8),
-        const Icon(Icons.arrow_forward_rounded)
-      ]);
+  bool timerEnabled = true;
+  int timerSeconds = 30;
 
-  myAnimation({String title = 'Next', bool progress = false}) {
+  defaultSubmitBtn(
+          {String title = 'Next',
+          IconData icon = Icons.arrow_forward_rounded}) =>
+      Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(title), const SizedBox(width: 8), Icon(icon)]);
+
+  myAnimation(
+      {String title = 'Next',
+      IconData icon = Icons.arrow_forward_rounded,
+      bool progress = false}) {
     Widget btn = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text(title),
       const SizedBox(width: 8),
       progress == false
-          ? const Icon(Icons.arrow_forward_rounded)
+          ? Icon(icon)
           : const SizedBox(
               height: 24, width: 24, child: CircularProgressIndicator())
     ]);
@@ -25,5 +33,18 @@ class MyWidgets extends ChangeNotifier {
   mySnackbar(String text) async {
     Get.closeAllSnackbars();
     Get.rawSnackbar(message: text);
+  }
+
+  timer() {
+    final timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (timerSeconds != 0) {
+        timerSeconds--;
+        notifyListeners();
+      } else {
+        timerEnabled = false;
+        notifyListeners();
+      }
+    });
+    return timer;
   }
 }

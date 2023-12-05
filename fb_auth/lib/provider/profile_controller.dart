@@ -33,10 +33,8 @@ class ProfileController with ChangeNotifier {
     if (image != null || webImage != null) {
       try {
         storage.FirebaseStorage fbStorage = storage.FirebaseStorage.instance;
-        storage.Reference refRoot =
-            fbStorage.ref().child('user-profile-images');
-        storage.Reference ref =
-            refRoot.child('image-profilephoto_${_user!.uid}.jpg');
+        storage.Reference refRoot = fbStorage.ref().child('USER-profileImage');
+        storage.Reference ref = refRoot.child('profileImage${_user!.uid}.jpg');
 
         if (pickedfile != null) {
           widgets.mySnackbar('uploading...');

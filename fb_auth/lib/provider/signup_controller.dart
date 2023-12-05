@@ -73,8 +73,8 @@ class SignUpAuth extends ChangeNotifier {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
           verificationId: verifyID, smsCode: phoneOTP);
       await _auth.signInWithCredential(authCredential);
-      notifyListeners();
       Get.rawSnackbar(message: 'OTP verified');
+      notifyListeners();
 
       _auth.currentUser!.displayName == null
           ? Get.toNamed('/profile')

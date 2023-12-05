@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'dart:ui';
+import 'package:firebase_authentication/assets/my_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -15,22 +15,10 @@ class OTPPage extends StatefulWidget {
 }
 
 class _OTPPageState extends State<OTPPage> {
-  bool timerEnabled = true;
-  static int seconds = 30;
-  Timer? timer;
   List<Widget>? list;
 
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (seconds != 0) {
-        setState(() => seconds--);
-      } else {
-        setState(() {
-          timerEnabled = false;
-        });
-      }
-    });
     super.initState();
   }
 
@@ -78,20 +66,22 @@ class _OTPPageState extends State<OTPPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: list = [
                           const Text('OTP not recieved?'),
-                          TextButton(
-                              onPressed: timerEnabled
-                                  ? null
-                                  : () async {
-                                      await context
-                                          .read<SignUpAuth>()
-                                          .mobileSignIn();
-                                      seconds = 30;
-                                      setState(() {});
-                                      timer;
-                                    },
-                              child: const Text('Resend OTP')),
-                          Text('in $seconds',
-                              style: const TextStyle(color: Colors.grey))
+                          Consumer2<SignUpAuth, MyWidgets>(
+                              builder: (context, signup, mywidgets, child) {
+                            return TextButton(
+                                onPressed: mywidgets.timerEnabled
+                                    ? null
+                                    : () async {
+                                        await signup.mobileSignIn();
+                                        mywidgets.timer();
+                                      },
+                                child: const Text('Resend OTP'));
+                          }),
+                          Consumer<MyWidgets>(
+                              builder: (context, provider, child) {
+                            return Text('in ${provider.timerSeconds}',
+                                style: const TextStyle(color: Colors.grey));
+                          })
                         ]))
               ]),
             ))
