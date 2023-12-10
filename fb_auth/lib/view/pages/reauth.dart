@@ -1,9 +1,9 @@
 import 'dart:ui';
-import 'package:firebase_authentication/assets/my_widgets.dart';
+import 'package:firebase_authentication/assets/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import '../../provider/signin_controller.dart';
+import '../../controller/signin_controller.dart';
 
 class ReAuthenticate extends StatefulWidget {
   const ReAuthenticate({super.key});

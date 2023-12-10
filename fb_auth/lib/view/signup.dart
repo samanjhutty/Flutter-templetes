@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../provider/profile_controller.dart';
-import '../provider/signup_controller.dart';
+import '../controller/profile_controller.dart';
+import '../controller/signup_controller.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import '../../assets/my_widgets.dart';
-import '../../provider/signup_controller.dart';
+import '../../assets/assets.dart';
+import '../../controller/signup_controller.dart';
 
 class MobileLogin extends StatefulWidget {
   const MobileLogin({Key? key}) : super(key: key);

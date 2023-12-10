@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import '../../assets/my_widgets.dart';
-import '../../provider/profile_controller.dart';
+import '../../assets/assets.dart';
+import '../../controller/profile_controller.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key});

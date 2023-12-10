@@ -1,19 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_authentication/assets/my_widgets.dart';
+import 'package:firebase_authentication/assets/assets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'auth/pages/mobile_login.dart';
-import 'auth/pages/otp_page.dart';
-import 'auth/pages/reauth.dart';
-import 'auth/pages/update_profile.dart';
-import 'auth/signin.dart';
-import 'auth/signup.dart';
-import 'provider/firebase_options.dart';
-import 'provider/profile_controller.dart';
-import 'provider/signin_controller.dart';
-import 'provider/signup_controller.dart';
+import 'view/pages/mobile_login.dart';
+import 'view/pages/otp_page.dart';
+import 'view/pages/reauth.dart';
+import 'view/pages/update_profile.dart';
+import 'view/signin.dart';
+import 'view/signup.dart';
+import 'controller/firebase_options.dart';
+import 'controller/profile_controller.dart';
+import 'controller/signin_controller.dart';
+import 'controller/signup_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:firebase_authentication/assets/my_widgets.dart';
+import 'package:firebase_authentication/assets/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
-import '../../provider/signup_controller.dart';
+import '../../controller/signup_controller.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key}) : super(key: key);
