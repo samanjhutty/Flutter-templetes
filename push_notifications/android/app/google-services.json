@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "71327912960",
+    "project_id": "fb-push-notifications-aa7b6",
+    "storage_bucket": "fb-push-notifications-aa7b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71327912960:android:46f6af42e109951901f4e5",
+        "android_client_info": {
+          "package_name": "com.example.push_notifications"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxempdRoZN1cq0yb8GvKyxca01hCzcRUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
