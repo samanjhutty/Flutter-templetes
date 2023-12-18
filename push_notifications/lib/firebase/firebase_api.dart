@@ -29,6 +29,7 @@ class FirebaseApi {
   Future initPushNotifications() async {
     // If the app was terminated
     fbMessaging.getInitialMessage().then(handleMessages);
+
     FirebaseMessaging.onMessage.listen(handleMessages);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessages);
   }

@@ -31,9 +31,7 @@
 
   <title>Notifications</title>
   <link rel="manifest" href="manifest.json">
-  <script>
-    
-  </script>
+  <link rel="firebase-messaging-sw" href="firebase-messaging-sw.js">
 
   <script>
     // The value below is injected by flutter build, do not touch.
@@ -45,10 +43,9 @@
 </head>
 <body>
   <script>
-    Firebase.initializeApp(DefaultFirebaseOptions.currentPlatform);
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
-        navigator.serviceWorker.register("../firebase-messaging-sw.js").then(function(registration) {
+        navigator.serviceWorker.register("firebase-messaging-sw.js").then(function(registration) {
     console.log('Registration successful, scope is:', registration.scope);})
         
       })
