@@ -30,7 +30,12 @@ class FirebaseApi {
     // If the app was terminated
     fbMessaging.getInitialMessage().then(handleMessages);
 
-    FirebaseMessaging.onMessage.listen(handleMessages);
+    // If the app is in backround
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessages);
+  }
+
+  // If the app is open
+  Future onOpen() async {
+    FirebaseMessaging.onMessage.listen(handleMessages);
   }
 }
