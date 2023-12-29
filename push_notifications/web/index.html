@@ -43,13 +43,6 @@
 </head>
 <body>
   <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker.register("firebase-messaging-sw.js").then(function(registration) {
-    console.log('Registration successful, scope is:', registration.scope);})
-        
-      })
-    }
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
@@ -63,6 +56,11 @@
         }
       });
     });
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      });
+    }
   </script>
 </body>
 </html>

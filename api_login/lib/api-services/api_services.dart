@@ -38,7 +38,10 @@ class ApiServices {
       {required String email, required String password}) async {
     var url = Uri.parse(ApiConstants.baseURL + ApiConstants.login);
     var response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer ${box.get('user-tokken')}',
+          'Content-Type': 'application/json'
+        },
         body: jsonEncode({'email': email, 'password': password}));
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);

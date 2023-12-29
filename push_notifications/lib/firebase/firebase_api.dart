@@ -10,7 +10,7 @@ class FirebaseApi {
   // Function to initialize FB messaging
   Future<void> initNotification() async {
     // Permission to display notifications
-    fbMessaging.requestPermission();
+    fbMessaging.requestPermission(alert: true, badge: true, sound: true);
 
     token = await fbMessaging.getToken(vapidKey: vapidKey);
     print('Tokken:: $token');

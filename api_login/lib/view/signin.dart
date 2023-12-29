@@ -15,14 +15,6 @@ class _SignInState extends State<SignIn> {
   final double myWidth = 350;
 
   @override
-  void dispose() {
-    final provider = context.read<LoginAuth>();
-    provider.password.dispose();
-    provider.emailAddress.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Material(
       child: SafeArea(
@@ -83,25 +75,33 @@ class _SignInState extends State<SignIn> {
                               border: OutlineInputBorder(),
                             )),
                         Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Consumer<LoginAuth>(
-                                builder: (context, provider, child) {
-                              return ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16)),
-                                  onPressed: () {
-                                    if (formkey.currentState!.validate()) {
-                                      provider.signIn();
-                                    }
-                                  },
-                                  icon: const Icon(Icons.arrow_forward_rounded),
-                                  label: const Text('Login'));
-                            })),
+                            padding: const EdgeInsets.symmetric(vertical: 24),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Consumer<LoginAuth>(
+                                      builder: (context, provider, child) {
+                                    return ElevatedButton.icon(
+                                        style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20)),
+                                        onPressed: () {
+                                          if (formkey.currentState!
+                                              .validate()) {
+                                            provider.signIn();
+                                          }
+                                        },
+                                        icon: const Icon(
+                                            Icons.arrow_forward_rounded),
+                                        label: const Text('Login'));
+                                  }),
+                                ),
+                              ],
+                            )),
                       ],
                     )),
                 Padding(
-                    padding: const EdgeInsets.only(top: 16),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -119,5 +119,13 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    final provider = context.read<LoginAuth>();
+    provider.password.dispose();
+    provider.emailAddress.dispose();
+    super.dispose();
   }
 }

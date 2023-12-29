@@ -100,6 +100,8 @@ class _AddDataState extends State<AddData> {
                   Expanded(
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                              backgroundColor: scheme.primary,
+                              foregroundColor: scheme.onPrimary,
                               padding:
                                   const EdgeInsets.symmetric(vertical: 20)),
                           onPressed: () {
@@ -129,8 +131,6 @@ class _AddDataState extends State<AddData> {
                   Expanded(
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: scheme.primary,
-                              foregroundColor: scheme.onPrimary,
                               padding:
                                   const EdgeInsets.symmetric(vertical: 20)),
                           onPressed: () {

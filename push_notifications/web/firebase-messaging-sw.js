@@ -1,11 +1,9 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getMessaging } from "firebase/messaging/sw";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js");
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
 const firebaseConfig = {
   apiKey: "AIzaSyCBZH9OAgtFqhQt1fOetFxa9VAFY5tE174",
   authDomain: "fb-push-notifications-aa7b6.firebaseapp.com",
@@ -16,8 +14,23 @@ const firebaseConfig = {
   measurementId: "G-JNZYY804JJ"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Messaging
-const messaging = getMessaging(firebaseConfig);
+messaging.setBackgroundMessageHandler(function (payload) {
+  const promiseChain = clients
+      .matchAll({
+          type: "window",
+          includeUncontrolled: true
+      })
+      .then(windowClients => {
+          for (let i = 0; i < windowClients.length; i++) {
+              const windowClient = windowClients[i];
+              windowClient.postMessage(payload);
+          }
+      })
+      .then(() => {
+          return registration.showNotification("New Message");
+      });
+  return promiseChain;
+});
+self.addEventListener('notificationclick', function (event) {
+  console.log('notification received: ', event)
+});

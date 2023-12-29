@@ -50,27 +50,55 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var device = MediaQuery.of(context);
     ColorScheme scheme = Theme.of(context).colorScheme;
+
     return Consumer<LoginAuth>(builder: (context, provider, child) {
-      provider.refresh();
-      return provider.login == false || provider.login == null
-          ? SafeArea(
-              child: SizedBox(
-              width: device.orientation == Orientation.portrait ? 360 : 450,
-              child: Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                    Text('You need to Login first',
-                        style: TextStyle(color: scheme.primary, fontSize: 36)),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                        onPressed: () => Get.toNamed('/signin'),
-                        child: const Text('Sign In / Sign Up'))
-                  ])),
-            ))
-          : Scaffold(
-              appBar: AppBar(title: Text(widget.title)),
-              body: const UserData());
+      return Scaffold(
+          appBar: AppBar(title: Text(widget.title)),
+          body: provider.login == false || provider.login == null
+              ? SafeArea(
+                  child: Center(
+                    child: Container(
+                      width: device.orientation == Orientation.portrait
+                          ? double.infinity
+                          : 450,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(),
+                            CircleAvatar(
+                                radius: 160,
+                                backgroundColor: Colors.transparent,
+                                child: Image.asset(
+                                  'lib/icons/api.png',
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                )),
+                            const Text(
+                                'You need to Login to Continue to the App',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 32)),
+                            Row(children: [
+                              Expanded(
+                                  child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    textStyle: const TextStyle(fontSize: 20),
+                                    backgroundColor: scheme.primary,
+                                    foregroundColor: scheme.onPrimary,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8))),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20)),
+                                onPressed: () => Get.toNamed('/signin'),
+                                child: const Text('Login'),
+                              ))
+                            ]),
+                          ]),
+                    ),
+                  ),
+                )
+              : const UserData());
     });
   }
 }

@@ -15,17 +15,6 @@ class _SignUpState extends State<SignUp> {
   final double boxHeight = 20;
 
   @override
-  void dispose() {
-    final provider = context.read<LoginAuth>();
-
-    provider.name.dispose();
-    provider.emailAddress.dispose();
-    provider.password.dispose();
-    provider.confirmPassword.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
     return Material(
@@ -38,6 +27,11 @@ class _SignUpState extends State<SignUp> {
               key: formkey,
               child: Column(
                 children: [
+                  const Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: CircleAvatar(
+                          radius: 60,
+                          child: Icon(Icons.login_rounded, size: 56))),
                   Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: Text('Create Account',
@@ -149,5 +143,16 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    final provider = context.read<LoginAuth>();
+
+    provider.name.dispose();
+    provider.emailAddress.dispose();
+    provider.password.dispose();
+    provider.confirmPassword.dispose();
+    super.dispose();
   }
 }

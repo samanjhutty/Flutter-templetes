@@ -28,6 +28,7 @@ class LoginAuth with ChangeNotifier {
   Future<void> createAccount() async {
     try {
       if (confirmPassword.text == password.text) {
+        Get.rawSnackbar(message: "Please wait...");
         await ApiServices().postUser(
             name: name.text.trim(),
             email: emailAddress.text.trim(),
@@ -38,6 +39,7 @@ class LoginAuth with ChangeNotifier {
         Get.rawSnackbar(message: "Password doesn't match");
       }
     } catch (e) {
+      print(e);
       Get.rawSnackbar(message: e.toString());
     }
   }
