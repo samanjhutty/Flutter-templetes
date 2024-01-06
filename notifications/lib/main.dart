@@ -51,10 +51,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text(widget.title)),
-        body: const Center(
-          child: Text(
-            'Push notifications will automatically open when clicked',
-            style: TextStyle(color: Colors.grey),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Push notifications will automatically open when clicked',
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                  onPressed: () {}, child: const Text('Local Notification'))
+            ],
           ),
         ));
   }
