@@ -3,18 +3,16 @@ import 'package:push_notifications/main.dart';
 
 class FirebaseApi {
   FirebaseMessaging fbMessaging = FirebaseMessaging.instance;
-  String? token;
-  final vapidKey =
-      'BKoqXaEgvZ9IjDeXw-_ApDrNEqFluETw4Et1xSbGCY0V7M5lmwlVmkPOet-i5vT_bB7c0nExItFgVTymRzXvwns';
+  // String? token;
+  // final vapidKey =
+  //     'BKoqXaEgvZ9IjDeXw-_ApDrNEqFluETw4Et1xSbGCY0V7M5lmwlVmkPOet-i5vT_bB7c0nExItFgVTymRzXvwns';
 
   // Function to initialize FB messaging
   Future<void> initNotification() async {
     // Permission to display notifications
-    fbMessaging.requestPermission(alert: true, badge: true, sound: true);
+    fbMessaging.requestPermission();
 
-    token = await fbMessaging.getToken(vapidKey: vapidKey);
-    print('Tokken:: $token');
-
+    // token = await fbMessaging.getToken(vapidKey: vapidKey);
     initPushNotifications();
   }
 
