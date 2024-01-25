@@ -8,36 +8,33 @@ A templete containing flutter projects containing single widget or sercice at a 
 
 Chronological order of files:
 
-| **App Name** | **package name** |
-| Material UI | material_ui |
+| **Widget Name** | **package name** | | **Widget Name** | **package_name** |
+|------------------|------------------|--|------------------|------------------|
+| Material UI | material_design | | Appbar with Actions | appbar_actions |
+| StateFull and StateLess Widgets | <ul><li>stateful_widgets</li><li>stateles_widgets</li></ul> | | Grid, Stack, List View | <ul><li>grid_view</li> <li>stack_view</li> <li>list_view_tile</li></ul> |
+| Floating Button | floating_button | | Form | form |
+| Widget Controller | controller | | Tab Controller | tab_controller |
+| Dynamic TextField | dynamic_textformfield | | Drawer | drawer_layout |
 
-- Grid, Stack, List View
-- StateFull and StateLess Widgets
-- Appbar actions
-- Floating Button
-- Form
-- Controller
-- Tab Controller
-- Dynamic TextField
+| **Social Media App related (Facebook style)** | package_name |
+|-----------|------------|
+| PostBar UI| postbar |
+|StoryBar UI | storybar |
+| MenuBar UI | menubar |
+|Posts UI | post |
+| Friends page UI | friends_page |
+|Profile page UI | profile_page |
 
-### Social Media App related (Facebook style)
-- Drawer
-- PostBar UI
-- StoryBar UI
-- MenuBar UI
-- Posts UI
-- Friends UI
-- Profile Page UI
-
-### Firebase Specific project
-- Firebase Authentication   
-- Firebase Storage
-- Firestore Database (Firebase Database)
-- Local Storage (Hive)
-- App Icon
-- Connectivity Checker
-- Notifications (Local and Firebase both)
-- API Login (API tokken)
+| **Firebase Specific project** | **package_name** |
+|-----------------|---------------|
+| Firebase Authentication | fb_auth |
+| Firebase Storage | fb_storage |
+| Firestore Database (Firebase Database) | firestore_db |
+| Local Storage (Hive) | hive_storage |
+| App Icon | app_icon |
+| Connectivity Checker | connectivity_checker |
+| Notifications (Local and Firebase both) | notifications |
+| API Login (API tokken) | api_login |
 
 
 ## Tech Stack
