@@ -4,10 +4,9 @@
 A templete containing flutter projects containing single widget or sercice at a time, the purpose of these widgets is resuability of widgets, just copy the code and design or make your own desing accordingly, have fun :)
 
 
-## Widget List
+# Widget List
 
 Chronological order of files:
-
 | **Widget Name** | **package name** | | **Widget Name** | **package_name** |
 |------------------|------------------|--|------------------|------------------|
 | Material UI | material_design | | Appbar with Actions | appbar_actions |
@@ -16,7 +15,10 @@ Chronological order of files:
 | Widget Controller | controller | | Tab Controller | tab_controller |
 | Dynamic TextField | dynamic_textformfield | | Drawer | drawer_layout |
 
-| **Social Media App related (Facebook style)** | package_name |
+
+## Social Media App related (Facebook style)
+
+| **Widget Name** | package_name |
 |-----------|------------|
 | PostBar UI| postbar |
 |StoryBar UI | storybar |
@@ -25,7 +27,10 @@ Chronological order of files:
 | Friends page UI | friends_page |
 |Profile page UI | profile_page |
 
-| **Firebase Specific project** | **package_name** |
+
+## Firebase Specific project
+
+| **Service Name** | **package_name** |
 |-----------------|---------------|
 | Firebase Authentication | fb_auth |
 | Firebase Storage | fb_storage |
