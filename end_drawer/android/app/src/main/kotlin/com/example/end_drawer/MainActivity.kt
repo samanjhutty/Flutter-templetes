@@ -1,6 +1,0 @@
-package com.example.end_drawer
-
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity: FlutterActivity() {
-}
