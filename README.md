@@ -1,27 +1,57 @@
-# Flutter-Practice
 
-Chronological order of files
-1.  first_app
-2.  material_ui_design
-3.  gird_view
-4.  stack_view
-5.  listview_list_tile
-6.  card_view
-7.  stateless_widget
-8.  text_button
-9.  elevated_button
-10. floating_button
-11. stateful_widget
-12. form
-13. Controller
-14. back_state          ///Project folders starts
-15. end_drawer
-16. drawer_layout
-17. postbar
-18. storybar
-19. menubar
-20. posts
-21. friend_page
-22. profile_page
-23. firebase_authentication      ///Firebase projects starts
-24. firebase_storage
+# Flutter Widgets Templete 
+
+A templete containing flutter projects containing single widget or sercice at a time, the purpose of these widgets is resuability of widgets, just copy the code and design or make your own desing accordingly, have fun :)
+
+
+## Widget List
+
+Chronological order of files:
+
+| **App Name** | **package name** |
+| Material UI | material_ui |
+
+- Grid, Stack, List View
+- StateFull and StateLess Widgets
+- Appbar actions
+- Floating Button
+- Form
+- Controller
+- Tab Controller
+- Dynamic TextField
+
+### Social Media App related (Facebook style)
+- Drawer
+- PostBar UI
+- StoryBar UI
+- MenuBar UI
+- Posts UI
+- Friends UI
+- Profile Page UI
+
+### Firebase Specific project
+- Firebase Authentication   
+- Firebase Storage
+- Firestore Database (Firebase Database)
+- Local Storage (Hive)
+- App Icon
+- Connectivity Checker
+- Notifications (Local and Firebase both)
+- API Login (API tokken)
+
+
+## Tech Stack
+
+**Client:** Flutter, Dart
+
+**Server:** http, Firebase, Hive
+
+
+## Support
+
+If you like my work and feel gererous, maybe you'de like to buy me a coffee.<br/>
+
+<a href="https://www.buymeacoffee.com/samandeepsingh"><img alt="Buy me a Coffee" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg"></a>
+
+
+
